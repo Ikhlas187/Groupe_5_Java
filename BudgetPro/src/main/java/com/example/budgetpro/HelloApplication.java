@@ -1,4 +1,5 @@
 package com.example.budgetpro;
+import com.example.budgetpro.services.Database;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,5 +16,6 @@ public class HelloApplication extends Application {
         stage.setTitle("BudgetPro");
         stage.setScene(scene);
         stage.show();
+        Database.getConnection();
     }
 }
