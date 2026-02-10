@@ -1,6 +1,7 @@
 package com.example.budgetpro.services;
 import com.example.budgetpro.models.User;
 import java.sql.*;
+import java.time.LocalDateTime;
 import com.example.budgetpro.services.Database;
 import java.util.regex.Pattern;
 
@@ -35,7 +36,7 @@ public class AuthServices {
             if (rs.next()) {
                 // ✅ Identifiants corrects : créer la session
                 currentUser = new User();
-                currentUser.setId(rs.getInt("id"));
+                currentUser.setId(rs.getInt("id_utilisateur"));
                 currentUser.setNom(rs.getString("nom"));
                 currentUser.setPrenom(rs.getString("prenom"));
                 currentUser.setEmail(rs.getString("email"));
@@ -44,48 +45,61 @@ public class AuthServices {
                 System.out.println("✅ Connexion réussie : " + currentUser.getPrenom());
                 return true;
             } else {
-                // ❌ Identifiants incorrects
-                System.out.println("❌ Email ou mot de passe incorrect");
+                System.out.println(" Email ou mot de passe incorrect");
                 return false;
             }
 
         } catch (SQLException e) {
-            System.err.println("❌ Erreur lors de la connexion : " + e.getMessage());
+            System.err.println("Erreur lors de la connexion : " + e.getMessage());
             return false;
         }
     }
 
     public static boolean register(String nom, String prenom, String email,
-                                   String password, String telephone) {
+                                   String password, String telephone,
+                                   String sexe, Integer age, Double soldeInitial) {
         // ========== VALIDATIONS ==========
 
-        // 1. Vérifier que les champs ne sont pas vides
         if (nom == null || nom.trim().isEmpty()) {
-            System.out.println("❌ Nom vide");
+            System.out.println("Nom vide");
             return false;
         }
 
         if (prenom == null || prenom.trim().isEmpty()) {
-            System.out.println("❌ Prénom vide");
+            System.out.println(" Prénom vide");
             return false;
         }
 
         if (email == null || email.trim().isEmpty()) {
-            System.out.println("❌ Email vide");
+            System.out.println(" Email vide");
             return false;
         }
 
         if (password == null || password.isEmpty()) {
-            System.out.println("❌ Mot de passe vide");
+            System.out.println(" Mot de passe vide");
             return false;
         }
 
         if (telephone == null || telephone.trim().isEmpty()) {
-            System.out.println("❌ Téléphone vide");
+            System.out.println(" Téléphone vide");
             return false;
         }
 
-        // 2. Valider le nom et prénom (2 caractères minimum)
+        if (sexe == null || sexe.isEmpty()) {
+            System.out.println(" Sexe non renseigné");
+            return false;
+        }
+
+        if (age == null) {
+            System.out.println(" Âge non renseigné");
+            return false;
+        }
+
+        if (soldeInitial == null) {
+            soldeInitial = 0.0;
+        }
+
+        // Validations métier
         if (nom.trim().length() < 2) {
             System.out.println("❌ Nom trop court (min 2 caractères)");
             return false;
@@ -96,23 +110,35 @@ public class AuthServices {
             return false;
         }
 
-        // 3. Valider l'email (format correct)
-        /*if (!isValidEmail(email)) {
+       /* if (!isValidEmail(email)) {
             System.out.println("❌ Format d'email invalide");
             return false;
         }*/
 
-        // 4. Valider le mot de passe (6 caractères minimum)
         if (password.length() < 6) {
             System.out.println("❌ Mot de passe trop court (min 6 caractères)");
             return false;
         }
 
-        // 5. Valider le téléphone (format basique)
-        /*if (!isValid(telephone)) {
+        /*if (!isValidPhone(telephone)) {
             System.out.println("❌ Format de téléphone invalide");
             return false;
         }*/
+
+        if (age < 13 || age > 120) {
+            System.out.println("Âge invalide (doit être entre 13 et 120)");
+            return false;
+        }
+
+        if (!sexe.equals("Homme") && !sexe.equals("Femme") && !sexe.equals("Autre")) {
+            System.out.println(" Sexe invalide");
+            return false;
+        }
+
+        if (soldeInitial < 0) {
+            System.out.println("Solde initial ne peut pas être négatif");
+            return false;
+        }
 
         // Nettoyer les données
         nom = nom.trim();
@@ -122,60 +148,65 @@ public class AuthServices {
 
         try {
             Connection conn = Database.getConnection();
-
-            // ========== Vérifier si l'email existe déjà ==========
-            String checkSql = "SELECT id FROM users WHERE email = ?";
+            String checkSql = "SELECT id FROM utilisateur WHERE email = ?";
             PreparedStatement checkStmt = conn.prepareStatement(checkSql);
             checkStmt.setString(1, email);
             ResultSet rs = checkStmt.executeQuery();
 
             if (rs.next()) {
-                // ❌ Email déjà utilisé
-                System.out.println("❌ Cet email est déjà utilisé");
+                System.out.println(" Cet email est déjà utilisé");
                 return false;
             }
 
             // ========== Vérifier si le téléphone existe déjà ==========
-            String checkPhoneSql = "SELECT id FROM users WHERE telephone = ?";
+            String checkPhoneSql = "SELECT id FROM utilisateur WHERE telephone = ?";
             PreparedStatement checkPhoneStmt = conn.prepareStatement(checkPhoneSql);
             checkPhoneStmt.setString(1, telephone);
             ResultSet rsPhone = checkPhoneStmt.executeQuery();
 
             if (rsPhone.next()) {
-                // ❌ Téléphone déjà utilisé
-                System.out.println("❌ Ce numéro de téléphone est déjà utilisé");
+                System.out.println("Ce numéro de téléphone est déjà utilisé");
                 return false;
             }
 
-            // ========== Insérer le nouvel utilisateur ==========
-            String insertSql = "INSERT INTO users (nom, prenom, email, password, telephone) VALUES (?, ?, ?, ?, ?)";
+            String insertSql = """
+            INSERT INTO utilisateur (nom, prenom, email, password, telephone, sexe, age) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """;
+
             PreparedStatement insertStmt = conn.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
             insertStmt.setString(1, nom);
             insertStmt.setString(2, prenom);
             insertStmt.setString(3, email);
-            insertStmt.setString(4, password); // ⚠️ En production : hasher avec BCrypt !
+            insertStmt.setString(4, password);
             insertStmt.setString(5, telephone);
+            insertStmt.setString(6, sexe);
+            insertStmt.setInt(7, age);
 
             int rowsAffected = insertStmt.executeUpdate();
 
             if (rowsAffected > 0) {
-                // ✅ Inscription réussie
-
-                // Récupérer l'ID auto-généré
                 ResultSet generatedKeys = insertStmt.getGeneratedKeys();
                 int userId = 0;
                 if (generatedKeys.next()) {
                     userId = generatedKeys.getInt(1);
                 }
 
-                // Créer la session automatiquement (connexion auto après inscription)
+                // Créer la session automatiquement
                 currentUser = new User(nom, prenom, email, password, telephone);
                 currentUser.setId(userId);
+                currentUser.setSexe(sexe);
+                currentUser.setAge(age);
+                currentUser.setSoldeInitial(soldeInitial);
+                currentUser.setCreatedAt(LocalDateTime.now());
 
-                System.out.println("✅ Inscription réussie : " + currentUser.getPrenom());
+                System.out.println("✅ Inscription réussie : " + currentUser.getFullName());
+                System.out.println("   - Sexe: " + sexe);
+                System.out.println("   - Âge: " + age);
+
+
                 return true;
             } else {
-                // ❌ Erreur lors de l'insertion
                 System.out.println("❌ Erreur lors de l'inscription");
                 return false;
             }
@@ -185,9 +216,11 @@ public class AuthServices {
             e.printStackTrace();
             return false;
         }
+
     }
 
-
-
+    public static User getCurrentUser() {
+        return currentUser;
+    }
 
 }
