@@ -19,14 +19,14 @@ public class Login {
     private  PasswordField passwordTextField;
   @FXML
     private Button connexionButton;
+  @FXML
+  private Label versInscriptionLabel;
 
-    private void handleLogin() {
-        System.out.println("Label cliqué !");
-    }
     @FXML
      private void handleLogin (MouseEvent event){
       String email = emailTextField.getText();
       String password = passwordTextField.getText();
+
 
       if (email == null ||  email.trim().isEmpty()) {
           showAlert("Erreur", "Veuillez entrer votre email", Alert.AlertType.ERROR);
@@ -74,5 +74,10 @@ public class Login {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void versInscriptionPage (MouseEvent event){
+        SceneSwitcher.switchScene("/com/example/budgetpro/Register.fxml",(Node) event.getSource());
     }
 }

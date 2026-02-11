@@ -11,10 +11,8 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="724.0" prefWidth="676.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.budgetpro.pages.Register">
+<AnchorPane prefHeight="751.0" prefWidth="676.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.budgetpro.pages.Register">
    <children>
       <Label layoutX="280.0" layoutY="41.0" text="BudgetPro">
          <font>
@@ -44,13 +42,15 @@
                <SpinnerValueFactory.IntegerSpinnerValueFactory amountToStepBy="1" initialValue="18" max="100" min="0" />
            </valueFactory>
        </Spinner>
-      <Label layoutX="128.0" layoutY="522.0" text="Solde initial" />
-      <TextField fx:id="soldeTextField" layoutX="113.0" layoutY="546.0" prefHeight="26.0" prefWidth="306.0" />
-      <Label layoutX="128.0" layoutY="400.0" text="Mot de passe" />
-      <Label layoutX="116.0" layoutY="457.0" text="Confirmer mot de passe" />
-      <PasswordField fx:id="passwordTextField" layoutX="114.0" layoutY="418.0" prefHeight="26.0" prefWidth="306.0" />
-      <PasswordField fx:id="confirmPasswordTextField" layoutX="113.0" layoutY="486.0" prefHeight="26.0" prefWidth="306.0" />
-      <Button fx:id="inscriptionButton" layoutX="286.0" layoutY="595.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="72.0" text="S'inscrire" />
-      <Label fx:id="labelVersConnexion" layoutX="224.0" layoutY="633.0" prefHeight="18.0" prefWidth="248.0" text="Vous avez déja un compte ? Connectez-vous " />
+      <Label layoutX="120.0" layoutY="579.0" text="Solde initial" />
+      <TextField fx:id="soldeTextField" layoutX="105.0" layoutY="603.0" prefHeight="26.0" prefWidth="306.0" />
+      <Label layoutX="120.0" layoutY="457.0" text="Mot de passe" />
+      <Label layoutX="108.0" layoutY="514.0" text="Confirmer mot de passe" />
+      <PasswordField fx:id="passwordTextField" layoutX="106.0" layoutY="475.0" prefHeight="26.0" prefWidth="306.0" />
+      <PasswordField fx:id="confirmPasswordTextField" layoutX="105.0" layoutY="543.0" prefHeight="26.0" prefWidth="306.0" />
+      <Button fx:id="inscriptionButton" layoutX="286.0" layoutY="669.0" mnemonicParsing="false" onMouseClicked="#handleRegister" prefHeight="26.0" prefWidth="72.0" text="S'inscrire" />
+      <Label fx:id="labelVersConnexion" layoutX="224.0" layoutY="707.0" prefHeight="18.0" prefWidth="248.0" text="Vous avez déja un compte ? Connectez-vous " />
+      <Label layoutX="124.0" layoutY="393.0" text="Email" />
+      <TextField fx:id="emailTextField" layoutX="112.0" layoutY="419.0" prefHeight="26.0" prefWidth="306.0" promptText="Nom" />
    </children>
 </AnchorPane>

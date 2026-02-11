@@ -148,7 +148,7 @@ public class AuthServices {
 
         try {
             Connection conn = Database.getConnection();
-            String checkSql = "SELECT id FROM utilisateur WHERE email = ?";
+            String checkSql = "SELECT id_utilisateur FROM utilisateur WHERE email = ?";
             PreparedStatement checkStmt = conn.prepareStatement(checkSql);
             checkStmt.setString(1, email);
             ResultSet rs = checkStmt.executeQuery();
@@ -159,7 +159,7 @@ public class AuthServices {
             }
 
             // ========== Vérifier si le téléphone existe déjà ==========
-            String checkPhoneSql = "SELECT id FROM utilisateur WHERE telephone = ?";
+            String checkPhoneSql = "SELECT id_utilisateur FROM utilisateur WHERE telephone = ?";
             PreparedStatement checkPhoneStmt = conn.prepareStatement(checkPhoneSql);
             checkPhoneStmt.setString(1, telephone);
             ResultSet rsPhone = checkPhoneStmt.executeQuery();

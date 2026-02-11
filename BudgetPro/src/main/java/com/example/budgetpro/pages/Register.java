@@ -2,8 +2,12 @@ package com.example.budgetpro.pages;
 
 import com.example.budgetpro.HelloApplication;
 import com.example.budgetpro.services.AuthServices;
+import com.example.budgetpro.services.SceneSwitcher;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+
 import java.io.IOException;
 
 public class Register {
@@ -26,7 +30,7 @@ public class Register {
     }
 
     @FXML
-    private void handleRegister() {
+    private void handleRegister(MouseEvent event) {
         // 1️⃣ Récupérer les valeurs
         String nom = nomTextField.getText();
         String prenom = prenomTextField.getText();
@@ -91,12 +95,7 @@ public class Register {
         // 4️⃣ Afficher le résultat
         if (success) {
             showAlert("Succès", "Compte créé avec succès ! Bienvenue " + prenom + " !", Alert.AlertType.INFORMATION);
-           /* try {
-                Hello.showDashboard();
-            } catch (IOException e) {
-                e.printStackTrace();
-                showAlert("Erreur", "Impossible de charger le tableau de bord", Alert.AlertType.ERROR);
-            }*/
+            SceneSwitcher.switchScene("/com/example/budgetpro/Dashboard.fxml",(Node) event.getSource());
         } else {
             showAlert("Erreur", "Inscription échouée. Vérifiez vos informations.", Alert.AlertType.ERROR);
         }
