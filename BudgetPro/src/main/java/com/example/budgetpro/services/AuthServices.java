@@ -146,15 +146,21 @@ public class AuthServices {
         email = email.trim().toLowerCase();
         telephone = telephone.trim();
 
+        Connection conn = null;
+
         try {
-            Connection conn = Database.getConnection();
+            conn = Database.getConnection();
+            conn.setAutoCommit(false); // ← IMPORTANT : Transaction
+
+            // ========== Vérifier si l'email existe déjà ==========
             String checkSql = "SELECT id_utilisateur FROM utilisateur WHERE email = ?";
             PreparedStatement checkStmt = conn.prepareStatement(checkSql);
             checkStmt.setString(1, email);
             ResultSet rs = checkStmt.executeQuery();
 
             if (rs.next()) {
-                System.out.println(" Cet email est déjà utilisé");
+                System.out.println("❌ Cet email est déjà utilisé");
+                conn.rollback(); // Annuler la transaction
                 return false;
             }
 
@@ -165,58 +171,112 @@ public class AuthServices {
             ResultSet rsPhone = checkPhoneStmt.executeQuery();
 
             if (rsPhone.next()) {
-                System.out.println("Ce numéro de téléphone est déjà utilisé");
+                System.out.println("❌ Ce numéro de téléphone est déjà utilisé");
+                conn.rollback(); // Annuler la transaction
                 return false;
             }
 
-            String insertSql = """
+            // ========== Insérer l'utilisateur ==========
+            String insertUserSql = """
             INSERT INTO utilisateur (nom, prenom, email, password, telephone, sexe, age) 
             VALUES (?, ?, ?, ?, ?, ?, ?)
         """;
 
-            PreparedStatement insertStmt = conn.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
-            insertStmt.setString(1, nom);
-            insertStmt.setString(2, prenom);
-            insertStmt.setString(3, email);
-            insertStmt.setString(4, password);
-            insertStmt.setString(5, telephone);
-            insertStmt.setString(6, sexe);
-            insertStmt.setInt(7, age);
+            PreparedStatement insertUserStmt = conn.prepareStatement(insertUserSql, Statement.RETURN_GENERATED_KEYS);
+            insertUserStmt.setString(1, nom);
+            insertUserStmt.setString(2, prenom);
+            insertUserStmt.setString(3, email);
+            insertUserStmt.setString(4, password); // ⚠️ En production : hasher avec BCrypt !
+            insertUserStmt.setString(5, telephone);
+            insertUserStmt.setString(6, sexe);
+            insertUserStmt.setInt(7, age);
 
-            int rowsAffected = insertStmt.executeUpdate();
+            int rowsAffected = insertUserStmt.executeUpdate();
 
-            if (rowsAffected > 0) {
-                ResultSet generatedKeys = insertStmt.getGeneratedKeys();
-                int userId = 0;
-                if (generatedKeys.next()) {
-                    userId = generatedKeys.getInt(1);
-                }
-
-                // Créer la session automatiquement
-                currentUser = new User(nom, prenom, email, password, telephone);
-                currentUser.setId(userId);
-                currentUser.setSexe(sexe);
-                currentUser.setAge(age);
-                currentUser.setSoldeInitial(soldeInitial);
-                currentUser.setCreatedAt(LocalDateTime.now());
-
-                System.out.println("✅ Inscription réussie : " + currentUser.getFullName());
-                System.out.println("   - Sexe: " + sexe);
-                System.out.println("   - Âge: " + age);
-
-
-                return true;
-            } else {
+            if (rowsAffected == 0) {
                 System.out.println("❌ Erreur lors de l'inscription");
+                conn.rollback(); // Annuler la transaction
                 return false;
             }
+
+            // ========== Récupérer l'ID de l'utilisateur créé ==========
+            ResultSet generatedKeys = insertUserStmt.getGeneratedKeys();
+            int userId = 0;
+
+            if (generatedKeys.next()) {
+                userId = generatedKeys.getInt(1);
+            } else {
+                System.out.println("❌ Impossible de récupérer l'ID utilisateur");
+                conn.rollback(); // Annuler la transaction
+                return false;
+            }
+
+            // ========== Insérer le solde initial dans la table budgets ==========
+            if (soldeInitial > 0) {
+                String insertBudgetSql = """
+                INSERT INTO budget (montant, id_utilisateur, id_categorie) 
+                VALUES (?, ?, NULL)
+            """;
+
+                PreparedStatement insertBudgetStmt = conn.prepareStatement(insertBudgetSql);
+                insertBudgetStmt.setDouble(1, soldeInitial);
+                insertBudgetStmt.setInt(2, userId);
+
+                int budgetRows = insertBudgetStmt.executeUpdate();
+
+                if (budgetRows > 0) {
+                    System.out.println("✅ Solde initial enregistré : " + soldeInitial + "€");
+                } else {
+                    System.out.println("⚠️ Erreur lors de l'enregistrement du solde initial");
+                    conn.rollback(); // Annuler TOUTE la transaction (user + budget)
+                    return false;
+                }
+            }
+
+            // ========== VALIDER LA TRANSACTION ==========
+            conn.commit(); // ← IMPORTANT : Valider toutes les modifications
+
+            // ========== Créer la session utilisateur ==========
+            currentUser = new User(nom, prenom, email, password, telephone);
+            currentUser.setId(userId);
+            currentUser.setSexe(sexe);
+            currentUser.setAge(age);
+            currentUser.setSoldeInitial(soldeInitial);
+            currentUser.setCreatedAt(LocalDateTime.now());
+
+            System.out.println("✅ Inscription réussie : " + currentUser.getFullName());
+            System.out.println("   - Sexe: " + sexe);
+            System.out.println("   - Âge: " + age);
+            System.out.println("   - Solde initial: " + soldeInitial + "€");
+
+            return true;
 
         } catch (SQLException e) {
             System.err.println("❌ Erreur SQL lors de l'inscription : " + e.getMessage());
             e.printStackTrace();
-            return false;
-        }
 
+            // En cas d'erreur, annuler toute la transaction
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                    System.out.println("⚠️ Transaction annulée");
+                }
+            } catch (SQLException rollbackEx) {
+                System.err.println("❌ Erreur lors du rollback : " + rollbackEx.getMessage());
+            }
+
+            return false;
+
+        } finally {
+            // Remettre l'auto-commit à true
+            try {
+                if (conn != null) {
+                    conn.setAutoCommit(true);
+                }
+            } catch (SQLException e) {
+                System.err.println("❌ Erreur lors de la réactivation de l'auto-commit : " + e.getMessage());
+            }
+        }
     }
 
     public static User getCurrentUser() {
