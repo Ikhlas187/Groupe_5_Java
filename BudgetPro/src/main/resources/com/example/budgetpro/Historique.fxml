@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" 
+            xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="com.example.budgetpro.pages.Historique"
+            prefHeight="600.0" prefWidth="800.0"
+            style="-fx-background-color: #f5f5f5;">
+
+    <!-- EN-TÊTE -->
+    <top>
+        <VBox spacing="20" style="-fx-background-color: white; -fx-padding: 20;">
+            <!-- Titre -->
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Historique des Transactions" 
+                       style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+            </HBox>
+
+            <!-- Barre d'outils : Boutons Export + Filtres -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <!-- Boutons Export -->
+                <Button fx:id="exportJsonButton" 
+                        text="Exporter JSON" 
+                        onAction="#handleExportJSON"
+                        style="-fx-background-color: #FF9500; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5; -fx-cursor: hand;">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Button>
+
+                <Button fx:id="exportCsvButton" 
+                        text="Exporter CSV" 
+                        onAction="#handleExportCSV"
+                        style="-fx-background-color: #FF9500; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5; -fx-cursor: hand;">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Button>
+
+                <!-- Spacer -->
+                <Region HBox.hgrow="ALWAYS" />
+
+                <!-- Filtre par catégorie -->
+                <Label text="Filtre :" style="-fx-font-size: 14px; -fx-text-fill: #666;" />
+                <ComboBox fx:id="categorieComboBox" 
+                          promptText="All"
+                          onAction="#handleFilterCategorie"
+                          prefWidth="150"
+                          style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-radius: 5;">
+                </ComboBox>
+                
+                <!-- Filtre par période -->
+                <Label text="Date :" style="-fx-font-size: 14px; -fx-text-fill: #666;" />
+                <DatePicker fx:id="dateDebutPicker" 
+                            promptText="Date début"
+                            prefWidth="130"
+                            style="-fx-background-color: white;" />
+
+                <Label text="au" style="-fx-font-size: 14px; -fx-text-fill: #666;" />
+
+                <DatePicker fx:id="dateFinPicker" 
+                            promptText="Date fin"
+                            prefWidth="130"
+                            style="-fx-background-color: white;" />
+
+                <Button text="Filtrer" 
+                        onAction="#handleFilterByDate"
+                        style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5; -fx-cursor: hand;">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Button>
+
+                <Button text="Réinitialiser" 
+                        onAction="#handleResetFilters"
+                        style="-fx-background-color: #757575; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5; -fx-cursor: hand;">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Button>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- TABLEAU DES TRANSACTIONS -->
+    <center>
+        <VBox style="-fx-background-color: white; -fx-padding: 20;">
+            <TableView fx:id="transactionsTable" 
+                       VBox.vgrow="ALWAYS"
+                       style="-fx-background-color: white;">
+                
+                <columns>
+                    <!-- Colonne Titre -->
+                    <TableColumn fx:id="titreColumn" 
+                                 text="Titre" 
+                                 prefWidth="200" 
+                                 style="-fx-alignment: CENTER-LEFT;" />
+                    
+                    <!-- Colonne Catégorie -->
+                    <TableColumn fx:id="categorieColumn" 
+                                 text="Catégorie" 
+                                 prefWidth="150" 
+                                 style="-fx-alignment: CENTER;" />
+                    
+                    <!-- Colonne Prix -->
+                    <TableColumn fx:id="prixColumn" 
+                                 text="Prix" 
+                                 prefWidth="150" 
+                                 style="-fx-alignment: CENTER;" />
+                    
+                    <!-- Colonne Date -->
+                    <TableColumn fx:id="dateColumn" 
+                                 text="Date" 
+                                 prefWidth="150" 
+                                 style="-fx-alignment: CENTER;" />
+                    
+                    <!-- Colonne Description -->
+                    <TableColumn fx:id="descriptionColumn" 
+                                 text="Description" 
+                                 prefWidth="250" 
+                                 style="-fx-alignment: CENTER-LEFT;" />
+                </columns>
+
+                <placeholder>
+                    <Label text="Aucune transaction trouvée" 
+                           style="-fx-text-fill: #999; -fx-font-size: 14px;" />
+                </placeholder>
+            </TableView>
+        </VBox>
+    </center>
+
+    <!-- PIED DE PAGE -->
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" 
+              spacing="20" 
+              style="-fx-background-color: white; -fx-padding: 20;">
+            
+            <Label fx:id="totalLabel" 
+                   text="Total : 0 XOF" 
+                   style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333;">
+                <font>
+                    <Font name="System Bold" size="16.0" />
+                </font>
+            </Label>
+        </HBox>
+    </bottom>
+
+</BorderPane>
