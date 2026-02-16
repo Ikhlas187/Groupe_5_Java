@@ -8,10 +8,11 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             prefHeight="900" prefWidth="1400"
-            style="-fx-background-color: #F5F5F5;">
+            style="-fx-background-color: #F5F5F5;"
+            fx:controller="com.example.budgetpro.pages.DashboardController">
 
    <!-- ========================================
-        SIDEBAR (Menu gauche)
+        SIDEBAR (Menu gauche - COMPLET)
         ======================================== -->
    <left>
       <VBox spacing="15" prefWidth="300"
@@ -29,31 +30,37 @@
          </Label>
 
          <!-- Bouton Dashboard -->
-         <Button text="🏠  Dashboard" prefWidth="260" prefHeight="50"
-                 style="-fx-background-color: #FF9800; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20;"/>
+         <Button fx:id="btnDashboard" text="🏠  Dashboard" prefWidth="260" prefHeight="50"
+                 onAction="#showDashboardContent"
+                 style="-fx-background-color: #FF9800; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20; -fx-cursor: hand;"/>
 
          <!-- Bouton Historique -->
-         <Button text="🕐  Historique des transactions" prefWidth="260" prefHeight="50"
-                 style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20;"/>
+         <Button fx:id="btnHistory" text="🕐  Historique des transactions" prefWidth="260" prefHeight="50"
+                 onAction="#showHistoryContent"
+                 style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20; -fx-cursor: hand;"/>
 
          <!-- Bouton Statistiques -->
-         <Button text="📈  Statistiques et graphiques" prefWidth="260" prefHeight="50"
-                 style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20;"/>
+         <Button fx:id="btnStatistics" text="📈  Statistiques et graphiques" prefWidth="260" prefHeight="50"
+                 onAction="#showStatisticsContent"
+                 style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20; -fx-cursor: hand;"/>
 
          <!-- Bouton Paramètres -->
-         <Button text="⚙️  Paramètres" prefWidth="260" prefHeight="50"
-                 style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20;"/>
+         <Button fx:id="btnSettings" text="⚙️  Paramètres" prefWidth="260" prefHeight="50"
+                 onAction="#showSettingsContent"
+                 style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20; -fx-cursor: hand;"/>
 
          <!-- Spacer -->
          <Region VBox.vgrow="ALWAYS"/>
 
          <!-- Bouton Ajouter transaction -->
          <Button text="➕  Ajouter une transaction" prefWidth="260" prefHeight="50"
-                 style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20;"/>
+                 onAction="#addTransaction"
+                 style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20; -fx-cursor: hand;"/>
 
          <!-- Bouton Ajouter catégorie -->
          <Button text="➖  Ajouter une catégorie" prefWidth="260" prefHeight="50"
-                 style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20;"/>
+                 onAction="#addCategory"
+                 style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20; -fx-cursor: hand;"/>
 
          <!-- Spacer -->
          <Region VBox.vgrow="ALWAYS"/>
@@ -63,7 +70,7 @@
                style="-fx-background-color: rgba(255, 255, 255, 0.2); -fx-background-radius: 15; -fx-padding: 15;">
             <Circle radius="30" fill="#FFB84D"/>
             <VBox>
-               <Label text="AGBETI Ikhlas"
+               <Label fx:id="usernameLabel" text="AGBETI Ikhlas"
                       style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
                <Hyperlink text="Déconnexion"
                           style="-fx-text-fill: white; -fx-font-size: 12px;"/>
@@ -73,195 +80,12 @@
    </left>
 
    <!-- ========================================
-        CONTENU PRINCIPAL (Centre)
+        ZONE DE CONTENU DYNAMIQUE (Droite)
         ======================================== -->
    <center>
-      <VBox spacing="30">
-         <padding>
-            <Insets top="30" right="40" bottom="30" left="40"/>
-         </padding>
-
-         <!-- ========== HEADER AVEC NAVIGATION MOIS ========== -->
-         <HBox alignment="CENTER" spacing="30">
-            <!-- Bouton précédent -->
-            <Button text="◀" prefWidth="50" prefHeight="50"
-                    style="-fx-background-color: transparent; -fx-font-size: 20px; -fx-cursor: hand;"/>
-
-            <!-- Mois actuel -->
-            <Label text="January 2026">
-               <font>
-                  <Font name="System Bold" size="24"/>
-               </font>
-            </Label>
-
-            <!-- Bouton suivant -->
-            <Button text="▶" prefWidth="50" prefHeight="50"
-                    style="-fx-background-color: transparent; -fx-font-size: 20px; -fx-cursor: hand;"/>
-         </HBox>
-
-         <!-- ========== CERCLE DE BUDGET ========== -->
-         <VBox alignment="CENTER" spacing="10">
-            <StackPane>
-               <!-- Cercle de fond (gris) -->
-               <Circle radius="100" fill="transparent" stroke="#E0E0E0" strokeWidth="15"/>
-
-               <!-- Cercle de progression (vert) -->
-               <Circle radius="100" fill="transparent" stroke="#4CAF50" strokeWidth="15"
-                       strokeDashArray="628" strokeDashOffset="314"/>
-
-               <!-- Montants au centre -->
-               <VBox alignment="CENTER" spacing="5">
-                  <Label text="100.000 XOF">
-                     <font>
-                        <Font name="System Bold" size="28"/>
-                     </font>
-                  </Label>
-                  <Label text="500.000 XOF"
-                         style="-fx-text-fill: #666;">
-                     <font>
-                        <Font size="16"/>
-                     </font>
-                  </Label>
-               </VBox>
-            </StackPane>
-         </VBox>
-
-         <!-- ========== SCROLL POUR LES CATÉGORIES ========== -->
-         <ScrollPane fitToWidth="true" prefHeight="500"
-                     style="-fx-background-color: transparent; -fx-border-color: transparent;">
-            <VBox spacing="20">
-
-               <!-- ========== CATÉGORIE FOOD ========== -->
-               <VBox spacing="15"
-                     style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 20;">
-
-                  <!-- Titre -->
-                  <Label text="Food">
-                     <font>
-                        <Font name="System Bold" size="18"/>
-                     </font>
-                     <style>-fx-text-fill: #2196F3;</style>
-                  </Label>
-
-                  <!-- Restaurant -->
-                  <HBox alignment="CENTER_LEFT" spacing="15">
-                     <Label text="🍴" style="-fx-font-size: 18px;"/>
-                     <Label text="Restaurant" style="-fx-font-size: 14px;"/>
-                     <Region HBox.hgrow="ALWAYS"/>
-                     <Label text="25.000 XOF" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
-                     <Button text="+" prefWidth="30" prefHeight="30"
-                             style="-fx-background-color: #333; -fx-text-fill: white; -fx-background-radius: 50%; -fx-font-size: 16px;"/>
-                  </HBox>
-
-                  <!-- Boissons -->
-                  <HBox alignment="CENTER_LEFT" spacing="15">
-                     <Label text="🍴" style="-fx-font-size: 18px;"/>
-                     <Label text="Boissons" style="-fx-font-size: 14px;"/>
-                     <Region HBox.hgrow="ALWAYS"/>
-                     <Label text="75.000 XOF" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
-                     <Button text="+" prefWidth="30" prefHeight="30"
-                             style="-fx-background-color: #333; -fx-text-fill: white; -fx-background-radius: 50%; -fx-font-size: 16px;"/>
-                  </HBox>
-
-                  <!-- Provisions -->
-                  <HBox alignment="CENTER_LEFT" spacing="15">
-                     <Label text="🍴" style="-fx-font-size: 18px;"/>
-                     <Label text="Provisions" style="-fx-font-size: 14px;"/>
-                     <Region HBox.hgrow="ALWAYS"/>
-                     <Label text="105.000 XOF" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
-                     <Button text="+" prefWidth="30" prefHeight="30"
-                             style="-fx-background-color: #333; -fx-text-fill: white; -fx-background-radius: 50%; -fx-font-size: 16px;"/>
-                  </HBox>
-               </VBox>
-
-               <!-- ========== CATÉGORIE LOGEMENT ========== -->
-               <VBox spacing="15"
-                     style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 20;">
-
-                  <!-- Titre -->
-                  <Label text="Logement">
-                     <font>
-                        <Font name="System Bold" size="18"/>
-                     </font>
-                     <style>-fx-text-fill: #2196F3;</style>
-                  </Label>
-
-                  <!-- Eau -->
-                  <HBox alignment="CENTER_LEFT" spacing="15">
-                     <Label text="🍴" style="-fx-font-size: 18px;"/>
-                     <Label text="Eau" style="-fx-font-size: 14px;"/>
-                     <Region HBox.hgrow="ALWAYS"/>
-                     <Label text="25.000 XOF" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
-                     <Button text="+" prefWidth="30" prefHeight="30"
-                             style="-fx-background-color: #333; -fx-text-fill: white; -fx-background-radius: 50%; -fx-font-size: 16px;"/>
-                  </HBox>
-
-                  <!-- Électricité -->
-                  <HBox alignment="CENTER_LEFT" spacing="15">
-                     <Label text="🍴" style="-fx-font-size: 18px;"/>
-                     <Label text="Électricité" style="-fx-font-size: 14px;"/>
-                     <Region HBox.hgrow="ALWAYS"/>
-                     <Label text="75.000 XOF" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
-                     <Button text="+" prefWidth="30" prefHeight="30"
-                             style="-fx-background-color: #333; -fx-text-fill: white; -fx-background-radius: 50%; -fx-font-size: 16px;"/>
-                  </HBox>
-
-                  <!-- Internet -->
-                  <HBox alignment="CENTER_LEFT" spacing="15">
-                     <Label text="🍴" style="-fx-font-size: 18px;"/>
-                     <Label text="Internet" style="-fx-font-size: 14px;"/>
-                     <Region HBox.hgrow="ALWAYS"/>
-                     <Label text="105.000 XOF" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
-                     <Button text="+" prefWidth="30" prefHeight="30"
-                             style="-fx-background-color: #333; -fx-text-fill: white; -fx-background-radius: 50%; -fx-font-size: 16px;"/>
-                  </HBox>
-               </VBox>
-
-               <!-- ========== CATÉGORIE TRANSPORT ========== -->
-               <VBox spacing="15"
-                     style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 20;">
-
-                  <!-- Titre -->
-                  <Label text="Transport">
-                     <font>
-                        <Font name="System Bold" size="18"/>
-                     </font>
-                     <style>-fx-text-fill: #2196F3;</style>
-                  </Label>
-
-                  <!-- Assurance -->
-                  <HBox alignment="CENTER_LEFT" spacing="15">
-                     <Label text="🍴" style="-fx-font-size: 18px;"/>
-                     <Label text="Assurance" style="-fx-font-size: 14px;"/>
-                     <Region HBox.hgrow="ALWAYS"/>
-                     <Label text="25.000 XOF" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
-                     <Button text="+" prefWidth="30" prefHeight="30"
-                             style="-fx-background-color: #333; -fx-text-fill: white; -fx-background-radius: 50%; -fx-font-size: 16px;"/>
-                  </HBox>
-
-                  <!-- Essence -->
-                  <HBox alignment="CENTER_LEFT" spacing="15">
-                     <Label text="🍴" style="-fx-font-size: 18px;"/>
-                     <Label text="Essence" style="-fx-font-size: 14px;"/>
-                     <Region HBox.hgrow="ALWAYS"/>
-                     <Label text="75.000 XOF" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
-                     <Button text="+" prefWidth="30" prefHeight="30"
-                             style="-fx-background-color: #333; -fx-text-fill: white; -fx-background-radius: 50%; -fx-font-size: 16px;"/>
-                  </HBox>
-
-                  <!-- Taxi -->
-                  <HBox alignment="CENTER_LEFT" spacing="15">
-                     <Label text="🍴" style="-fx-font-size: 18px;"/>
-                     <Label text="Taxi" style="-fx-font-size: 14px;"/>
-                     <Region HBox.hgrow="ALWAYS"/>
-                     <Label text="105.000 XOF" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
-                     <Button text="+" prefWidth="30" prefHeight="30"
-                             style="-fx-background-color: #333; -fx-text-fill: white; -fx-background-radius: 50%; -fx-font-size: 16px;"/>
-                  </HBox>
-               </VBox>
-
-            </VBox>
-         </ScrollPane>
-      </VBox>
+      <StackPane fx:id="contentArea" style="-fx-background-color: #F5F5F5;">
+         <!-- Zone vide pour le contenu dynamique -->
+      </StackPane>
    </center>
 </BorderPane>
+

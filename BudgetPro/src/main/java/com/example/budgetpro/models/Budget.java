@@ -2,12 +2,15 @@ package com.example.budgetpro.models;
 
 import java.time.LocalDate;
 
+/**
+ * Représente le budget alloué à une catégorie pour un mois donné
+ */
 public class Budget {
     private int idBudget;
     private double montant;        // Montant alloué pour cette catégorie
     private int userId;            // Utilisateur propriétaire
-    private int categorieId;       // Catégorie concernée (ex: Alimentation)
-    private LocalDate mois;        // Mois du budget (ex: 2026-01-01)
+    private int categorieId;       // Catégorie concernée
+    private LocalDate mois;        // Mois du budget (format: premier jour du mois)
 
     // Constructeur vide
     public Budget() {}
@@ -64,41 +67,11 @@ public class Budget {
         this.mois = mois;
     }
 
-    // ========== MÉTHODES MÉTIER (à déplacer dans BudgetService) ==========
-
-    /**
-     * Vérifie si le budget est dépassé
-     * @param totalDepenses Total des dépenses pour cette catégorie
-     * @return true si dépassé, false sinon
-     */
-    public boolean estDepasse(double totalDepenses) {
-        return totalDepenses > montant;
-    }
-
-    /**
-     * Calcule le solde restant
-     * @param totalDepenses Total des dépenses pour cette catégorie
-     * @return Montant restant (peut être négatif si dépassé)
-     */
-    public double getSoldeRestant(double totalDepenses) {
-        return montant - totalDepenses;
-    }
-
-    /**
-     * Calcule le pourcentage utilisé
-     * @param totalDepenses Total des dépenses pour cette catégorie
-     * @return Pourcentage (0-100+)
-     */
-    public double getPourcentageUtilise(double totalDepenses) {
-        if (montant == 0) return 0;
-        return (totalDepenses / montant) * 100;
-    }
-
     @Override
     public String toString() {
         return "Budget{" +
                 "id=" + idBudget +
-                ", montant=" + montant + "€" +
+                ", montant=" + montant + " XOF" +
                 ", userId=" + userId +
                 ", categorieId=" + categorieId +
                 ", mois=" + mois +

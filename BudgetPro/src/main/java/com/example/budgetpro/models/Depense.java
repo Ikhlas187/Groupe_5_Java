@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Depense {
     private int idDepense;
-    private int montant;
+    private double montant;
     private String description;
     private LocalDate date;
     private int sousCategorieId;
@@ -24,7 +24,7 @@ public class Depense {
 
     // Getters
     public int getIdDepense() { return idDepense; }
-    public int getMontant() { return montant; }
+    public double  getMontant() { return montant; }
     public String getDescription() { return description; }
     public LocalDate getDate() { return date; }
     public int getSousCategorieId() { return sousCategorieId; }

@@ -3,6 +3,8 @@ import com.example.budgetpro.models.User;
 import java.sql.*;
 import java.time.LocalDateTime;
 import com.example.budgetpro.services.Database;
+import com.example.budgetpro.services.BudgetService;
+import java.time.YearMonth;
 import java.util.regex.Pattern;
 
 public class AuthServices {
@@ -234,7 +236,10 @@ public class AuthServices {
             }
 
             // ========== VALIDER LA TRANSACTION ==========
-            conn.commit(); // ← IMPORTANT : Valider toutes les modifications
+            conn.commit(); //
+            CategorieService.initCategoriesDefaut(userId);
+            BudgetService.initBudgetsMois(userId, YearMonth.now());
+            // ← IMPORTANT : Valider toutes les modifications
 
             // ========== Créer la session utilisateur ==========
             currentUser = new User(nom, prenom, email, password, telephone);
@@ -282,5 +287,6 @@ public class AuthServices {
     public static User getCurrentUser() {
         return currentUser;
     }
+    public static boolean isLoggedIn() {return currentUser != null;}
 
 }
