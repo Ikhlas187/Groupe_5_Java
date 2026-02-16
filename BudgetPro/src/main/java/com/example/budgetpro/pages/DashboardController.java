@@ -4,7 +4,9 @@ import com.example.budgetpro.models.*;
 import com.example.budgetpro.services.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 
@@ -426,10 +428,11 @@ public class DashboardController {
     }
 
     @FXML
-    private void showHistoryContent() {
+    private void showHistoryContent(MouseEvent event) {
         // TODO: Charger le contenu Historique
         System.out.println("Afficher Historique");
         setActiveButton(btnHistory);
+        SceneSwitcher.switchScene("/com/example/budgetpro/Historique.fxml",(Node) event.getSource());
     }
 
     @FXML
