@@ -71,7 +71,7 @@
                     <execution>
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.example.budgetpro.HelloApplication</mainClass>
+                            <mainClass>com.example.budgetpro.TestStatistique</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
