@@ -14,7 +14,7 @@ public class Depense {
     public Depense() {}
 
     // Constructeur avec paramètres
-    public Depense(int montant, String description, LocalDate date, int sousCategorieId, int userId) {
+    public Depense(double montant, String description, LocalDate date, int sousCategorieId, int userId) {
         this.montant = montant;
         this.description = description;
         this.date = date;
@@ -32,7 +32,7 @@ public class Depense {
 
     // Setters
     public void setIdDepense(int idDepense) { this.idDepense = idDepense; }
-    public void setMontant(int montant) { this.montant = montant; }
+    public void setMontant(double montant) { this.montant = montant; }
     public void setDescription(String description) { this.description = description; }
     public void setDate(LocalDate date) { this.date = date; }
     public void setUserId(int userId) {this.userId = userId;}

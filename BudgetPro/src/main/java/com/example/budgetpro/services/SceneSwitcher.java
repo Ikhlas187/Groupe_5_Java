@@ -5,6 +5,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import java.io.IOException;
+import javafx.scene.layout.StackPane;
+
+
 
 public class SceneSwitcher {
     public static void switchScene(String fxml, Node node) {
@@ -20,6 +23,14 @@ public class SceneSwitcher {
             e.printStackTrace();
         }
     }
+
+    public static void switchContent(String fxml, StackPane container) throws IOException {
+        Parent root = FXMLLoader.load(SceneSwitcher.class.getResource(fxml));
+
+        container.getChildren().clear();      // On vide le panneau
+        container.getChildren().add(root);    // On ajoute le nouveau contenu
+    }
+
 
 
 

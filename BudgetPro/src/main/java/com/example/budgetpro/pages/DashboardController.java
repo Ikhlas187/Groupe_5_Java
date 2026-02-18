@@ -3,6 +3,7 @@ package com.example.budgetpro.pages;
 import com.example.budgetpro.models.*;
 import com.example.budgetpro.services.*;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -10,6 +11,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -348,7 +351,7 @@ public class DashboardController {
         btnPlus.setStyle("-fx-background-color: #333; -fx-text-fill: white; " +
                 "-fx-background-radius: 50%; -fx-cursor: hand;");
         btnPlus.setOnAction(e -> {
-            ajouterDepense(sousCat);
+            ajouterDepenseDialog(sousCat);
         });
 
         row.getChildren().addAll(iconLabel, nomLabel, spacer, montantLabel, btnPlus);
@@ -400,7 +403,7 @@ public class DashboardController {
      * Ajoute une dépense à une sous-catégorie
      */
     private void ajouterDepense(SousCategorie sousCat) {
-        // TODO: Ouvrir un dialogue pour ajouter une dépense
+
         System.out.println("Ajouter dépense pour : " + sousCat.getNomSousCategorie());
 
         // Pour l'instant, juste un message
@@ -428,25 +431,27 @@ public class DashboardController {
     }
 
     @FXML
-    private void showHistoryContent(MouseEvent event) {
+    private void showHistoryContent(MouseEvent event) throws IOException {
         // TODO: Charger le contenu Historique
         System.out.println("Afficher Historique");
         setActiveButton(btnHistory);
-        SceneSwitcher.switchScene("/com/example/budgetpro/Historique.fxml",(Node) event.getSource());
+        SceneSwitcher.switchContent("/com/example/budgetpro/Historique.fxml",contentArea);
     }
 
     @FXML
-    private void showStatisticsContent() {
+    private void showStatisticsContent() throws IOException {
         // TODO: Charger le contenu Statistiques
         System.out.println("Afficher Statistiques");
         setActiveButton(btnStatistics);
+        SceneSwitcher.switchContent("/com/example/budgetpro/Statistique.fxml",contentArea);
     }
 
     @FXML
-    private void showSettingsContent() {
+    private void showSettingsContent() throws IOException {
         // TODO: Charger le contenu Paramètres
         System.out.println("Afficher Paramètres");
         setActiveButton(btnSettings);
+        SceneSwitcher.switchContent("/com/example/budgetpro/Settings.fxml",contentArea);
     }
 
     @FXML
@@ -489,4 +494,76 @@ public class DashboardController {
 
         activeButton.setStyle(activeStyle);
     }
+    private void ajouterDepenseDialog(SousCategorie sousCat) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Ajouter une dépense");
+        dialog.setHeaderText("Sous-catégorie : " + sousCat.getNomSousCategorie());
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20));
+
+        TextField montantField = new TextField();
+        montantField.setPromptText("Montant (XOF)");
+
+        TextField descriptionField = new TextField();
+        descriptionField.setPromptText("Description");
+
+        DatePicker datePicker = new DatePicker(LocalDate.now());
+
+        grid.add(new Label("Montant :"), 0, 0);
+        grid.add(montantField, 1, 0);
+        grid.add(new Label("Description :"), 0, 1);
+        grid.add(descriptionField, 1, 1);
+        grid.add(new Label("Date :"), 0, 2);
+        grid.add(datePicker, 1, 2);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        dialog.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    double montant = Double.parseDouble(montantField.getText());
+                    String description = descriptionField.getText();
+                    LocalDate date = datePicker.getValue();
+
+                    if (montant <= 0) {
+                        showAlert("Erreur", "Le montant doit être positif", Alert.AlertType.ERROR);
+                        return;
+                    }
+
+                    if (description == null || description.trim().isEmpty()) {
+                        description = "Dépense " + sousCat.getNomSousCategorie();
+                    }
+
+                    int userId = AuthServices.getCurrentUser().getId();
+
+                    boolean success = DepenseService.ajouterDepense(
+                            montant,
+                            description,
+                            date,
+                            sousCat.getIdSousCategorie(),
+                            userId
+                    );
+
+                    if (success) {
+                        loadCategories();
+                        updateBudgetCircle();
+
+                        showAlert("Succès",
+                                "Dépense de " + String.format("%.0f", montant) + " XOF ajoutée !",
+                                Alert.AlertType.INFORMATION);
+                    } else {
+                        showAlert("Erreur", "Impossible d'ajouter la dépense", Alert.AlertType.ERROR);
+                    }
+
+                } catch (NumberFormatException ex) {
+                    showAlert("Erreur", "Montant invalide !", Alert.AlertType.ERROR);
+                }
+            }
+        });
+    }
+
 }

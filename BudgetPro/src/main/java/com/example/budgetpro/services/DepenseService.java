@@ -1,6 +1,7 @@
 package com.example.budgetpro.services;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 public class DepenseService {
@@ -92,5 +93,45 @@ public class DepenseService {
         }
 
         return 0.0;
+    }
+
+    public static boolean ajouterDepense(double montant, String description, LocalDate date,
+                                         int sousCategorieId, int userId) {
+        try {
+            Connection conn = Database.getConnection();
+
+            // Récupérer l'id_categorie depuis la sous-catégorie
+            String getCatSql = "SELECT id_categorie FROM sous_categorie WHERE id_sous_categorie = ?";
+            PreparedStatement getCatStmt = conn.prepareStatement(getCatSql);
+            getCatStmt.setInt(1, sousCategorieId);
+            ResultSet rsCat = getCatStmt.executeQuery();
+
+            int categorieId = 0;
+            if (rsCat.next()) {
+                categorieId = rsCat.getInt("id_categorie");
+            }
+
+            // Insérer la dépense
+            String sql = """
+                INSERT INTO depense (montant, description, date, id_sous_categorie, id_utilisateur, id_categorie) 
+                VALUES (?, ?, ?, ?, ?, ?)
+            """;
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setDouble(1, montant);
+            stmt.setString(2, description);
+            stmt.setDate(3, Date.valueOf(date));
+            stmt.setInt(4, sousCategorieId);
+            stmt.setInt(5, userId);
+            stmt.setInt(6, categorieId);
+
+            int rows = stmt.executeUpdate();
+
+            return rows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
