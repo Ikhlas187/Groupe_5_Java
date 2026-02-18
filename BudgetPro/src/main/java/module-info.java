@@ -7,7 +7,8 @@ module com.example.budgetpro {
 
 
     opens com.example.budgetpro to javafx.fxml;
-    opens com.example.budgetpro.pages to javafx.fxml;
+    //opens com.example.budgetpro.pages to javafx.fxml;
+    opens com.example.budgetpro.pages to javafx.fxml, javafx.base;
 
     exports com.example.budgetpro;
     exports com.example.budgetpro.services;

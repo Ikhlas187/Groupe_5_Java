@@ -70,7 +70,7 @@
                style="-fx-background-color: rgba(255, 255, 255, 0.2); -fx-background-radius: 15; -fx-padding: 15;">
             <Circle radius="30" fill="#FFB84D"/>
             <VBox>
-               <Label fx:id="usernameLabel" text="AGBETI Ikhlas"
+               <Label fx:id="usernameLabel"
                       style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
                <Hyperlink text="Déconnexion"
                           style="-fx-text-fill: white; -fx-font-size: 12px;"/>

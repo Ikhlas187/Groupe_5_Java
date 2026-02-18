@@ -1,5 +1,7 @@
 package com.example.budgetpro.models;
 
+import com.example.budgetpro.services.CategorieService;
+
 import java.time.LocalDate;
 
 public class Depense {
@@ -29,6 +31,10 @@ public class Depense {
     public LocalDate getDate() { return date; }
     public int getSousCategorieId() { return sousCategorieId; }
     public int getUserId() {return userId;}
+    public String getNomSousCategorie() {
+        SousCategorie sousCategorie = CategorieService.getSousCategorieById(this.sousCategorieId);
+        return sousCategorie != null ? sousCategorie.getNomSousCategorie() : "Inconnue";
+    }
 
     // Setters
     public void setIdDepense(int idDepense) { this.idDepense = idDepense; }

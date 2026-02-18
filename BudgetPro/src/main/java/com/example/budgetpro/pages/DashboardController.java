@@ -47,14 +47,14 @@ public class DashboardController {
 
     @FXML
     public void initialize() {
-        // Vérifier si un utilisateur est connecté
-        if (!AuthServices.isLoggedIn()) {
+
+        if (AuthServices.isLoggedIn()) {
             try {
                 usernameLabel.setText(AuthServices.getCurrentUser().getFullName());
+                System.out.println("Nom chargé");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return;
         }
 
         currentMonth = YearMonth.now();
@@ -181,10 +181,10 @@ public class DashboardController {
         container.setAlignment(Pos.CENTER);
 
         // Labels qui seront mis à jour
-        budgetTotalLabel = new Label("0 XOF");
+        budgetTotalLabel = new Label(BudgetService.getBudgetInitial(AuthServices.getCurrentUser().getId())+" XOF");
         budgetTotalLabel.setFont(Font.font("System Bold", 28));
 
-        budgetRemainingLabel = new Label("0 XOF");
+        budgetRemainingLabel = new Label("5 XOF");
         budgetRemainingLabel.setStyle("-fx-text-fill: #666;");
         budgetRemainingLabel.setFont(Font.font(16));
 
@@ -203,18 +203,25 @@ public class DashboardController {
 
         int userId = AuthServices.getCurrentUser().getId();
 
-        // Calculer le budget total de tous les budgets du mois
-        double budgetTotal = BudgetService.getTotalBudgetsMois(userId, currentMonth);
+        // 🎯 RÉCUPÉRER LE BUDGET INITIAL (solde de départ)
+        double budgetInitial = BudgetService.getBudgetInitial(userId);
 
-        // Calculer le total des dépenses du mois
+        // 🎯 CALCULER LE TOTAL DES DÉPENSES
         double depensesTotal = DepenseService.getTotalDepensesMois(userId, currentMonth);
 
-        // Calculer le restant
-        double restant = budgetTotal - depensesTotal;
+        // 🎯 CALCULER LE RESTANT
+        double restant = budgetInitial - depensesTotal;
 
-        // Mettre à jour les labels
-        budgetTotalLabel.setText(String.format("%.0f XOF", budgetTotal));
-        budgetRemainingLabel.setText(String.format("%.0f XOF", restant));
+        // 🎯 AFFICHAGE
+        budgetTotalLabel.setText(String.format("%.0f XOF", budgetInitial));    // Label du HAUT
+        budgetRemainingLabel.setText(String.format("%.0f XOF", restant));       // Label du BAS
+
+        // 🎯 COULEUR DU RESTANT
+        if (restant < 0) {
+            budgetRemainingLabel.setStyle("-fx-text-fill: #F44336; -fx-font-size: 16px;"); // Rouge si négatif
+        } else {
+            budgetRemainingLabel.setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 16px;"); // Vert si positif
+        }
     }
 
     // ========================================

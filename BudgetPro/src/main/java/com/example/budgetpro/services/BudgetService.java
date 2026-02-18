@@ -103,4 +103,25 @@ public class BudgetService {
 
         return 0.0;
     }
+        public static double getBudgetInitial(int userId) {
+            try {
+                Connection conn = Database.getConnection();
+
+                String sql = "SELECT montant FROM budget WHERE id_utilisateur = ? AND id_categorie IS NULL";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, userId);
+
+
+                ResultSet rs = stmt.executeQuery();
+
+                if (rs.next()) {
+                    return rs.getDouble("montant");
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            return 0.0;
+        }
 }

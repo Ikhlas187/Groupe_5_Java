@@ -22,7 +22,7 @@ public class CategorieDAO {
         List<String> categories = new ArrayList<>();
         categories.add("All"); 
         
-        String query = "SELECT nomCategorie FROM categorie ORDER BY nomCategorie";
+        String query = "SELECT nom_categorie FROM categorie ORDER BY nom_categorie";
         
         try {
             Connection conn = Database.getConnection();
@@ -30,7 +30,7 @@ public class CategorieDAO {
             ResultSet rs = stmt.executeQuery(query);
             
             while (rs.next()){
-                categories.add(rs.getString("nomCategorie"));
+                categories.add(rs.getString("nom_categorie"));
             }
             
             System.out.println((categories.size()- 1) + "catégories chargées");
@@ -47,7 +47,7 @@ public class CategorieDAO {
     Récupérer l'ID d'une categorie par son nom
     */
     public int getCategorieIdByName(String nomCategorie){
-        String query = "SELECT id_categorie FROM categorie WHERE nomCategorie = ?";
+        String query = "SELECT id_categorie FROM categorie WHERE nom_categorie= ?";
         
         try {
             Connection conn = Database.getConnection();

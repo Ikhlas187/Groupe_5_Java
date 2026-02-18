@@ -4,7 +4,10 @@
  */
 package com.example.budgetpro.pages;
 
+import com.example.budgetpro.dao.DepenseDAO;
 import com.example.budgetpro.models.Depense;
+import com.example.budgetpro.models.User;
+import com.example.budgetpro.services.AuthServices;
 import com.example.budgetpro.services.HistoriqueService;
 import com.example.budgetpro.dao.CategorieDAO;
 import javafx.collections.FXCollections;
@@ -116,7 +119,7 @@ public class Historique {
      * Charger toutes les transactions
      */
     private void loadAllTransactions() {
-        currentDepenses = historiqueService.getAllDepenses();
+        currentDepenses = DepenseDAO.getDepensesByUserId(AuthServices.getCurrentUser().getId());
         displayTransactions(currentDepenses);
     }
     
@@ -130,7 +133,7 @@ public class Historique {
             String categorieName = historiqueService.getCategorieNameForDepense(d.getIdDepense());
             
             TransactionRow row = new TransactionRow(
-                d.getDescription(),
+                d.getNomSousCategorie(),
                 categorieName,
                 d.getMontant() + " XOF",
                 d.getDate().toString(),

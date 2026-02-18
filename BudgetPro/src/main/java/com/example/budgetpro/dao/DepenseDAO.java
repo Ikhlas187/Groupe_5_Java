@@ -12,12 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DepenseDAO {
-    
-    /**
-     * Récupérer toutes les dépenses
-     * @return 
-     */
-    public List<Depense> getAllDepenses() {
+
+    public static List<Depense> getAllDepenses() {
         List<Depense> depenses = new ArrayList<>();
         String query = "SELECT id_depense, montant, description, date, " +
                       "id_sous_categorie, id_utilisateur " +
@@ -54,7 +50,7 @@ public class DepenseDAO {
      * Récupérer les dépenses d'un utilisateur spécifique
      * @return 
      */
-    public List<Depense> getDepensesByUserId(int userId) {
+    public static List<Depense> getDepensesByUserId(int userId) {
         List<Depense> depenses = new ArrayList<>();
         String query = "SELECT id_depense, montant, description, date, " +
                       "id_sous_categorie, id_utilisateur " +
@@ -172,7 +168,7 @@ public class DepenseDAO {
      * @return 
      */
     public String getCategorieNameByDepense(int idDepense) {
-        String query = "SELECT c.nomCategorie " +
+        String query = "SELECT c.nom_categorie " +
                       "FROM depense d " +
                       "JOIN sous_categorie sc ON d.id_sous_categorie = sc.id_sous_categorie " +
                       "JOIN categorie c ON sc.id_categorie = c.id_categorie " +
@@ -185,7 +181,7 @@ public class DepenseDAO {
             ResultSet rs = pstmt.executeQuery();
             
             if (rs.next()) {
-                return rs.getString("nomCategorie");
+                return rs.getString("nom_categorie");
             }
             
         } catch (SQLException e) {

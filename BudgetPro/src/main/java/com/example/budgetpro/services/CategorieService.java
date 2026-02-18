@@ -11,7 +11,7 @@ public class CategorieService {
      * Initialise les catégories par défaut (sans budget ni mois)
      */
     public static void initCategoriesDefaut(int userId) {
-        Map<String, List<String>> categoriesDefaut = new HashMap<>();
+        Map<String, List<String>> categoriesDefaut = new LinkedHashMap<>();
 
         categoriesDefaut.put("Alimentation", List.of("Boissons", "Courses", "Nourriture", "Restaurant"));
         categoriesDefaut.put("Logement", List.of("Eau", "Electricité", "Internet", "Loyer", "TV", "Téléphone", "Entretien", "Assurance"));
@@ -29,33 +29,59 @@ public class CategorieService {
                 String nomCategorie = entry.getKey();
                 List<String> sousCategories = entry.getValue();
 
-                // Créer la catégorie (SANS budget ni mois)
-                String insertCatSql = "INSERT IGNORE INTO categorie (nom_categorie, id_utilisateur) VALUES (?, ?)";
-                PreparedStatement catStmt = conn.prepareStatement(insertCatSql, Statement.RETURN_GENERATED_KEYS);
-                catStmt.setString(1, nomCategorie);
-                catStmt.setInt(2, userId);
-                catStmt.executeUpdate();
-
-                // Récupérer l'ID
-                ResultSet rs = catStmt.getGeneratedKeys();
                 int categorieId = 0;
-                if (rs.next()) {
-                    categorieId = rs.getInt(1);
+
+                // 🎯 ÉTAPE 1 : Vérifier si la catégorie existe déjà pour cet utilisateur
+                String checkSql = "SELECT id_categorie FROM categorie WHERE nom_categorie = ? AND id_utilisateur = ?";
+                PreparedStatement checkStmt = conn.prepareStatement(checkSql);
+                checkStmt.setString(1, nomCategorie);
+                checkStmt.setInt(2, userId);
+                ResultSet rsCheck = checkStmt.executeQuery();
+
+                if (rsCheck.next()) {
+                    // ✅ La catégorie existe déjà, récupérer son ID
+                    categorieId = rsCheck.getInt("id_categorie");
+                    System.out.println("  ⚠️ Catégorie existe : " + nomCategorie + " (ID: " + categorieId + ")");
+                } else {
+                    // ✅ La catégorie n'existe pas, la créer
+                    String insertCatSql = "INSERT INTO categorie (nom_categorie, id_utilisateur) VALUES (?, ?)";
+                    PreparedStatement catStmt = conn.prepareStatement(insertCatSql, Statement.RETURN_GENERATED_KEYS);
+                    catStmt.setString(1, nomCategorie);
+                    catStmt.setInt(2, userId);
+                    catStmt.executeUpdate();
+
+                    ResultSet rs = catStmt.getGeneratedKeys();
+                    if (rs.next()) {
+                        categorieId = rs.getInt(1);
+                        System.out.println("  ✅ Catégorie créée : " + nomCategorie + " (ID: " + categorieId + ")");
+                    }
                 }
 
-                // Créer les sous-catégories
-                for (String nomSousCategorie : sousCategories) {
-                    String insertSousCatSql = "INSERT INTO sous_categorie (nom_sous_categorie, id_categorie) VALUES (?, ?)";
-                    PreparedStatement sousCatStmt = conn.prepareStatement(insertSousCatSql);
-                    sousCatStmt.setString(1, nomSousCategorie);
-                    sousCatStmt.setInt(2, categorieId);
-                    sousCatStmt.executeUpdate();
+                // 🎯 ÉTAPE 2 : Créer les sous-catégories (seulement si categorieId > 0)
+                if (categorieId > 0) {
+                    for (String nomSousCategorie : sousCategories) {
+                        // Vérifier si la sous-catégorie existe déjà
+                        String checkSousSql = "SELECT id_sous_categorie FROM sous_categorie WHERE nom_sous_categorie = ? AND id_categorie = ?";
+                        PreparedStatement checkSousStmt = conn.prepareStatement(checkSousSql);
+                        checkSousStmt.setString(1, nomSousCategorie);
+                        checkSousStmt.setInt(2, categorieId);
+                        ResultSet rsSousCheck = checkSousStmt.executeQuery();
+
+                        if (!rsSousCheck.next()) {
+                            // ✅ La sous-catégorie n'existe pas, la créer
+                            String insertSousCatSql = "INSERT INTO sous_categorie (nom_sous_categorie, id_categorie) VALUES (?, ?)";
+                            PreparedStatement sousCatStmt = conn.prepareStatement(insertSousCatSql);
+                            sousCatStmt.setString(1, nomSousCategorie);
+                            sousCatStmt.setInt(2, categorieId);
+                            sousCatStmt.executeUpdate();
+                        }
+                    }
                 }
             }
 
             System.out.println("✅ Catégories créées pour l'utilisateur " + userId);
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -117,4 +143,29 @@ public class CategorieService {
 
         return sousCategories;
     }
+
+    public static SousCategorie getSousCategorieById(int sousCategorieId) {
+        try {
+            Connection conn = Database.getConnection();
+            String sql = "SELECT * FROM sous_categorie WHERE id_sous_categorie = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, sousCategorieId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                SousCategorie sousCat = new SousCategorie();
+                sousCat.setIdSousCategorie(rs.getInt("id_sous_categorie"));
+                sousCat.setNomSousCategorie(rs.getString("nom_sous_categorie"));
+                sousCat.setCategorieId(rs.getInt("id_categorie"));
+                return sousCat;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }
