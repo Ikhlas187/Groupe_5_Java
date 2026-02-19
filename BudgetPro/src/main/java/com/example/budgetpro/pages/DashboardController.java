@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import java.util.Optional;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -183,6 +184,7 @@ public class DashboardController {
         // Labels qui seront mis à jour
         budgetTotalLabel = new Label(BudgetService.getBudgetInitial(AuthServices.getCurrentUser().getId())+" XOF");
         budgetTotalLabel.setFont(Font.font("System Bold", 28));
+        budgetTotalLabel.setOnMouseClicked(e -> editBudgetInitial());
 
         budgetRemainingLabel = new Label("5 XOF");
         budgetRemainingLabel.setStyle("-fx-text-fill: #666;");
@@ -383,25 +385,66 @@ public class DashboardController {
             try {
                 double nouveauMontant = Double.parseDouble(montantStr);
 
+                // 🎯 VALIDATION 1 : Montant positif
                 if (nouveauMontant < 0) {
                     showAlert("Erreur", "Le montant ne peut pas être négatif", Alert.AlertType.ERROR);
                     return;
                 }
 
-                // Mettre à jour en base de données
+                int userId = AuthServices.getCurrentUser().getId();
+
+                // 🎯 VALIDATION 2 : Ne pas dépasser le budget initial
+                double budgetInitial = BudgetService.getBudgetInitial(userId);
+                double totalAutresCategories = BudgetService.getTotalBudgetsCategoriesMois(userId, currentMonth)
+                        - budget.getMontant(); // Exclure le budget actuel de cette catégorie
+                double nouveauTotal = totalAutresCategories + nouveauMontant;
+
+                if (nouveauTotal > budgetInitial) {
+                    double budgetDisponible = budgetInitial - totalAutresCategories;
+                    showAlert("Erreur",
+                            "Budget insuffisant !\n\n" +
+                                    "Budget initial : " + String.format("%.0f", budgetInitial) + " XOF\n" +
+                                    "Déjà alloué aux autres catégories : " + String.format("%.0f", totalAutresCategories) + " XOF\n" +
+                                    "Budget disponible : " + String.format("%.0f", budgetDisponible) + " XOF\n\n" +
+                                    "Vous ne pouvez pas allouer " + String.format("%.0f", nouveauMontant) + " XOF.",
+                            Alert.AlertType.ERROR);
+                    return;
+                }
+
+                // 🎯 VALIDATION 3 : Vérifier les dépenses déjà effectuées
+                double depensesCategorie = DepenseService.getTotalDepensesCategorie(userId, budget.getCategorieId(), currentMonth);
+
+                if (nouveauMontant < depensesCategorie) {
+                    Alert confirm = new Alert(Alert.AlertType.WARNING);
+                    confirm.setTitle("Attention");
+                    confirm.setHeaderText("Budget inférieur aux dépenses");
+                    confirm.setContentText(
+                            "Vous avez déjà dépensé " + String.format("%.0f", depensesCategorie) + " XOF dans cette catégorie.\n" +
+                                    "Allouer seulement " + String.format("%.0f", nouveauMontant) + " XOF créera un déficit de " +
+                                    String.format("%.0f", depensesCategorie - nouveauMontant) + " XOF.\n\n" +
+                                    "Voulez-vous continuer ?"
+                    );
+
+                    Optional<ButtonType> result = confirm.showAndWait();
+                    if (result.isEmpty() || result.get() != ButtonType.OK) {
+                        return;
+                    }
+                }
+
+                // 🎯 MISE À JOUR
                 boolean success = BudgetService.updateBudget(budget.getIdBudget(), nouveauMontant);
 
                 if (success) {
-                    // Mettre à jour l'affichage
                     budgetLabel.setText(String.format("%.0f XOF", nouveauMontant));
                     updateBudgetCircle();
-                    loadCategories(); // Recharger pour mettre à jour les restants
+                    loadCategories();
+                    showAlert("Succès", "Budget modifié avec succès !", Alert.AlertType.INFORMATION);
                 } else {
-                    showAlert("Erreur", "Impossible de mettre à jour le budget", Alert.AlertType.ERROR);
+                    showAlert("Erreur", "Impossible de modifier le budget", Alert.AlertType.ERROR);
                 }
 
             } catch (NumberFormatException e) {
-                showAlert("Erreur", "Montant invalide", Alert.AlertType.ERROR);
+                showAlert("Erreur", "Montant invalide !", Alert.AlertType.ERROR);
             }
         });
     }
@@ -519,6 +562,18 @@ public class DashboardController {
 
         DatePicker datePicker = new DatePicker(LocalDate.now());
 
+        // 🎯 BLOQUER LES DATES FUTURES
+        datePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                if (date != null && date.isAfter(LocalDate.now())) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #ffcccc;");
+                }
+            }
+        });
+
         grid.add(new Label("Montant :"), 0, 0);
         grid.add(montantField, 1, 0);
         grid.add(new Label("Description :"), 0, 1);
@@ -536,8 +591,19 @@ public class DashboardController {
                     String description = descriptionField.getText();
                     LocalDate date = datePicker.getValue();
 
+                    // 🎯 VALIDATION 1 : Montant positif
                     if (montant <= 0) {
                         showAlert("Erreur", "Le montant doit être positif", Alert.AlertType.ERROR);
+                        return;
+                    }
+
+                    // 🎯 VALIDATION 2 : Date dans le mois actuel
+                    YearMonth dateMonth = YearMonth.from(date);
+                    if (!dateMonth.equals(currentMonth)) {
+                        showAlert("Erreur",
+                                "La date doit être dans le mois actuel (" +
+                                        currentMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.FRENCH)) + ")",
+                                Alert.AlertType.ERROR);
                         return;
                     }
 
@@ -547,6 +613,38 @@ public class DashboardController {
 
                     int userId = AuthServices.getCurrentUser().getId();
 
+                    // 🎯 VALIDATION 3 : Vérifier le budget de la catégorie
+                    int categorieId = CategorieService.getSousCategorieById(sousCat.getIdSousCategorie()).getCategorieId();
+                    Budget budget = BudgetService.getBudgetCategorieParMois(userId, categorieId, currentMonth);
+
+                    if (budget != null) {
+                        double budgetAlloue = budget.getMontant();
+                        double depensesActuelles = DepenseService.getTotalDepensesCategorie(userId, categorieId, currentMonth);
+                        double nouveauTotal = depensesActuelles + montant;
+
+                        if (nouveauTotal > budgetAlloue) {
+                            double budgetRestant = budgetAlloue - depensesActuelles;
+
+                            Alert confirm = new Alert(Alert.AlertType.WARNING);
+                            confirm.setTitle("Dépassement de budget");
+                            confirm.setHeaderText("Cette dépense dépasse votre budget !");
+                            confirm.setContentText(
+                                    "Budget alloué : " + String.format("%.0f", budgetAlloue) + " XOF\n" +
+                                            "Déjà dépensé : " + String.format("%.0f", depensesActuelles) + " XOF\n" +
+                                            "Budget restant : " + String.format("%.0f", budgetRestant) + " XOF\n\n" +
+                                            "Cette dépense de " + String.format("%.0f", montant) + " XOF créera un dépassement de " +
+                                            String.format("%.0f", nouveauTotal - budgetAlloue) + " XOF.\n\n" +
+                                            "Voulez-vous continuer quand même ?"
+                            );
+
+                            Optional<ButtonType> result = confirm.showAndWait();
+                            if (result.isEmpty() || result.get() != ButtonType.OK) {
+                                return;
+                            }
+                        }
+                    }
+
+                    // 🎯 AJOUT DE LA DÉPENSE
                     boolean success = DepenseService.ajouterDepense(
                             montant,
                             description,
@@ -569,6 +667,59 @@ public class DashboardController {
                 } catch (NumberFormatException ex) {
                     showAlert("Erreur", "Montant invalide !", Alert.AlertType.ERROR);
                 }
+            }
+        });
+    }
+
+    /**
+     * Modifier le budget initial de l'utilisateur
+     */
+    private void editBudgetInitial() {
+        int userId = AuthServices.getCurrentUser().getId();
+        double budgetActuel = BudgetService.getBudgetInitial(userId);
+
+        TextInputDialog dialog = new TextInputDialog(String.format("%.0f", budgetActuel));
+        dialog.setTitle("Modifier le budget initial");
+        dialog.setHeaderText("Budget de départ mensuel");
+        dialog.setContentText("Montant (XOF) :");
+
+        dialog.showAndWait().ifPresent(montantStr -> {
+            try {
+                double nouveauMontant = Double.parseDouble(montantStr);
+
+                // 🎯 VALIDATION 1 : Montant positif
+                if (nouveauMontant < 0) {
+                    showAlert("Erreur", "Le montant ne peut pas être négatif", Alert.AlertType.ERROR);
+                    return;
+                }
+
+                // 🎯 VALIDATION 2 : Vérifier que le nouveau budget >= somme des budgets catégories
+                double totalBudgetsCategories = BudgetService.getTotalBudgetsCategoriesMois(userId, currentMonth);
+
+                if (nouveauMontant < totalBudgetsCategories) {
+                    showAlert("Erreur",
+                            "Le budget initial (" + String.format("%.0f", nouveauMontant) + " XOF) " +
+                                    "ne peut pas être inférieur à la somme des budgets alloués aux catégories (" +
+                                    String.format("%.0f", totalBudgetsCategories) + " XOF).\n\n" +
+                                    "Réduisez d'abord les budgets de vos catégories.",
+                            Alert.AlertType.ERROR);
+                    return;
+                }
+
+                // 🎯 MISE À JOUR
+                boolean success = BudgetService.updateBudgetInitial(userId, nouveauMontant);
+
+                if (success) {
+                    updateBudgetCircle();
+                    showAlert("Succès",
+                            "Budget initial modifié : " + String.format("%.0f", nouveauMontant) + " XOF",
+                            Alert.AlertType.INFORMATION);
+                } else {
+                    showAlert("Erreur", "Impossible de modifier le budget initial", Alert.AlertType.ERROR);
+                }
+
+            } catch (NumberFormatException e) {
+                showAlert("Erreur", "Montant invalide !", Alert.AlertType.ERROR);
             }
         });
     }

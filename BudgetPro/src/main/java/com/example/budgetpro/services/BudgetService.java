@@ -124,4 +124,69 @@ public class BudgetService {
 
             return 0.0;
         }
+
+    /**
+     * Récupère le total des budgets alloués aux catégories pour un mois (sans le budget initial)
+     */
+    public static double getTotalBudgetsCategoriesMois(int userId, YearMonth mois) {
+        try {
+            Connection conn = Database.getConnection();
+            LocalDate premierJour = mois.atDay(1);
+
+            String sql = "SELECT COALESCE(SUM(montant), 0) as total FROM budget " +
+                    "WHERE id_utilisateur = ? AND mois = ? AND id_categorie IS NOT NULL";
+            //                                                          ↑ Exclure le budget initial
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, userId);
+            stmt.setDate(2, Date.valueOf(premierJour));
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0.0;
+    }
+
+    /**
+     * Met à jour le budget initial
+     */
+    public static boolean updateBudgetInitial(int userId, double nouveauMontant) {
+        try {
+            Connection conn = Database.getConnection();
+
+            // Vérifier si le budget initial existe
+            String checkSql = "SELECT id_budget FROM budget WHERE id_utilisateur = ? AND id_categorie IS NULL";
+            PreparedStatement checkStmt = conn.prepareStatement(checkSql);
+            checkStmt.setInt(1, userId);
+            ResultSet rs = checkStmt.executeQuery();
+
+            if (rs.next()) {
+                // Budget existe, le mettre à jour
+                int budgetId = rs.getInt("id_budget");
+                String updateSql = "UPDATE budget SET montant = ? WHERE id_budget = ?";
+                PreparedStatement updateStmt = conn.prepareStatement(updateSql);
+                updateStmt.setDouble(1, nouveauMontant);
+                updateStmt.setInt(2, budgetId);
+                return updateStmt.executeUpdate() > 0;
+            } else {
+                // Budget n'existe pas, le créer
+                String insertSql = "INSERT INTO budget (montant, id_utilisateur, id_categorie) VALUES (?, ?, NULL)";
+                PreparedStatement insertStmt = conn.prepareStatement(insertSql);
+                insertStmt.setDouble(1, nouveauMontant);
+                insertStmt.setInt(2, userId);
+                return insertStmt.executeUpdate() > 0;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
