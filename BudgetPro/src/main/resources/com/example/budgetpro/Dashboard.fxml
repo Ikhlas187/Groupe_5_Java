@@ -53,12 +53,12 @@
          <Region VBox.vgrow="ALWAYS"/>
 
          <!-- Bouton Ajouter transaction -->
-         <Button text="➕  Ajouter une transaction" prefWidth="260" prefHeight="50"
-                 onAction="#addTransaction"
+         <Button text="➕  Ajouter une catégorie" prefWidth="260" prefHeight="50"
+                 onAction="#creerCategorieDialog"
                  style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20; -fx-cursor: hand;"/>
 
          <!-- Bouton Ajouter catégorie -->
-         <Button text="➖  Ajouter une catégorie" prefWidth="260" prefHeight="50"
+         <Button text="➖  Ajouter un revenu" prefWidth="260" prefHeight="50"
                  onAction="#addCategory"
                  style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20; -fx-cursor: hand;"/>
 

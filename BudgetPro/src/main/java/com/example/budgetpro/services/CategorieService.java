@@ -199,4 +199,49 @@ public class CategorieService {
         }
     }
 
+    /**
+     * Crée une nouvelle catégorie pour un utilisateur
+     */
+    public static int creerCategorie(String nomCategorie, int userId) {
+        try {
+            Connection conn = Database.getConnection();
+
+            // Vérifier si la catégorie existe déjà pour cet utilisateur
+            String checkSql = "SELECT id_categorie FROM categorie WHERE nom_categorie = ? AND id_utilisateur = ?";
+            PreparedStatement checkStmt = conn.prepareStatement(checkSql);
+            checkStmt.setString(1, nomCategorie);
+            checkStmt.setInt(2, userId);
+            ResultSet rs = checkStmt.executeQuery();
+
+            if (rs.next()) {
+                System.out.println("⚠️ Cette catégorie existe déjà");
+                return 0;  // Échec
+            }
+
+            // Créer la catégorie
+            String insertSql = "INSERT INTO categorie (nom_categorie, id_utilisateur) VALUES (?, ?)";
+            PreparedStatement insertStmt = conn.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            insertStmt.setString(1, nomCategorie);
+            insertStmt.setInt(2, userId);
+
+            int rows = insertStmt.executeUpdate();
+
+            if (rows > 0) {
+                ResultSet generatedKeys = insertStmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int categorieId = generatedKeys.getInt(1);
+                    System.out.println("✅ Catégorie créée : " + nomCategorie + " (ID: " + categorieId + ")");
+                    return categorieId;  // Retourner l'ID de la nouvelle catégorie
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;  // Échec
+    }
+
+
+
 }

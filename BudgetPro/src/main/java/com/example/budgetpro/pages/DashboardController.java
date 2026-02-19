@@ -11,6 +11,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import java.util.Optional;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -765,5 +767,111 @@ public class DashboardController {
             }
         });
     }
+
+    /**
+     * Dialogue pour créer une nouvelle catégorie
+     */
+    public void creerCategorieDialog() {
+        // Créer un dialogue personnalisé
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Créer une catégorie");
+        dialog.setHeaderText("Nouvelle catégorie de budget");
+
+        // Créer le formulaire
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20));
+
+        TextField nomField = new TextField();
+        nomField.setPromptText("Ex: Loisirs, Education, Santé...");
+
+        TextField sousCategoriesField = new TextField();
+        sousCategoriesField.setPromptText("Ex: Cinéma, Livres, Sport (séparées par des virgules)");
+
+        Label infoLabel = new Label("Les sous-catégories sont optionnelles.\nVous pourrez en ajouter plus tard.");
+        infoLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #666;");
+
+        grid.add(new Label("Nom de la catégorie * :"), 0, 0);
+        grid.add(nomField, 0, 1);
+        grid.add(new Label("Sous-catégories (optionnel) :"), 0, 2);
+        grid.add(sousCategoriesField, 0, 3);
+        grid.add(infoLabel, 0, 4);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        // Focus sur le champ nom
+        Platform.runLater(() -> nomField.requestFocus());
+
+        dialog.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                String nomCategorie = nomField.getText();
+                String sousCategoriesStr = sousCategoriesField.getText();
+
+                // 🎯 VALIDATION 1 : Nom obligatoire
+                if (nomCategorie == null || nomCategorie.trim().isEmpty()) {
+                    showAlert("Erreur", "Le nom de la catégorie est obligatoire", Alert.AlertType.ERROR);
+                    return;
+                }
+
+                // 🎯 VALIDATION 2 : Longueur minimale
+                if (nomCategorie.trim().length() < 2) {
+                    showAlert("Erreur", "Le nom doit contenir au moins 2 caractères", Alert.AlertType.ERROR);
+                    return;
+                }
+
+                // 🎯 VALIDATION 3 : Longueur maximale
+                if (nomCategorie.trim().length() > 50) {
+                    showAlert("Erreur", "Le nom ne peut pas dépasser 50 caractères", Alert.AlertType.ERROR);
+                    return;
+                }
+
+                int userId = AuthServices.getCurrentUser().getId();
+
+                // 🎯 CRÉER LA CATÉGORIE
+                int categorieId = CategorieService.creerCategorie(nomCategorie.trim(), userId);
+
+                if (categorieId == 0) {
+                    showAlert("Erreur",
+                            "Impossible de créer la catégorie.\nElle existe peut-être déjà.",
+                            Alert.AlertType.ERROR);
+                    return;
+                }
+
+                // 🎯 CRÉER LES SOUS-CATÉGORIES (si fournies)
+                if (sousCategoriesStr != null && !sousCategoriesStr.trim().isEmpty()) {
+                    String[] sousCategories = sousCategoriesStr.split(",");
+                    int nbCreees = 0;
+
+                    for (String sousCat : sousCategories) {
+                        String nom = sousCat.trim();
+                        if (!nom.isEmpty() && nom.length() >= 2) {
+                            boolean success = CategorieService.ajouterSousCategorie(nom, categorieId);
+                            if (success) {
+                                nbCreees++;
+                            }
+                        }
+                    }
+
+                    if (nbCreees > 0) {
+                        System.out.println("✅ " + nbCreees + " sous-catégorie(s) créée(s)");
+                    }
+                }
+
+                // 🎯 CRÉER UN BUDGET À 0 POUR LE MOIS ACTUEL
+                BudgetService.initBudgetsMois(userId, currentMonth);
+
+                // 🎯 RECHARGER L'INTERFACE
+                loadCategories();
+
+                showAlert("Succès",
+                        "Catégorie \"" + nomCategorie.trim() + "\" créée avec succès !",
+                        Alert.AlertType.INFORMATION);
+            }
+        });
+    }
+
+
 
 }
