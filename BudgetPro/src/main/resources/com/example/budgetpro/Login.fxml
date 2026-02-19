@@ -1,30 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="544.0" prefWidth="776.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.budgetpro.pages.Login">
-   <children>
-      <Label layoutX="312.0" layoutY="73.0" prefHeight="32.0" prefWidth="126.0" text="BudgetPro" textAlignment="CENTER">
-         <font>
-            <Font name="System Bold" size="22.0" />
-         </font>
-      </Label>
-      <TextField fx:id="emailTextField" layoutX="233.0" layoutY="192.0" prefHeight="26.0" prefWidth="246.0" />
-      <Label layoutX="257.0" layoutY="131.0" text="Gérez vos dépenses en toute sérénité" />
-      <Label layoutX="233.0" layoutY="162.0" prefHeight="18.0" prefWidth="43.0" text="Email" />
-      <Label layoutX="232.0" layoutY="241.0" prefHeight="18.0" prefWidth="87.0" text="Mot de passe" />
-      <Button fx:id="connexionButton" layoutX="339.0" layoutY="319.0" mnemonicParsing="false" onMouseClicked="#handleLogin" text="Connexion" />
-      <Label layoutX="317.0" layoutY="366.0" text="Mot de passe oublié ?" />
-      <Label fx:id="versInscriptionLabel" layoutX="259.0" layoutY="397.0" onMouseClicked="#versInscriptionPage" text="Vous n'avez pas de compte ? Inscrivez vous ">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor></Label>
-      <PasswordField fx:id="passwordTextField" layoutX="232.0" layoutY="272.0" prefHeight="26.0" prefWidth="246.0" />
-   </children>
-</AnchorPane>
+<StackPane
+    prefHeight="544.0"
+    prefWidth="776.0"
+    styleClass="root"
+    stylesheets="@/com/example/budgetpro/styles/authentification.css"
+    xmlns="http://javafx.com/javafx/25"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.example.budgetpro.pages.Login">
+
+    <!-- CARD CENTREE -->
+    <VBox styleClass="card" maxWidth="400" maxHeight="-Infinity" alignment="CENTER" spacing="10">
+
+        <!-- TITRE -->
+        <Label text="BudgetPro" styleClass="title-label" />
+
+        <!-- SOUS-TITRE -->
+        <Label text="Gérez vos dépenses en toute sérénité" styleClass="subtitle-label" />
+
+        <Region prefHeight="10" />
+
+        <!-- EMAIL -->
+        <Label text="Email" styleClass="field-label" maxWidth="300" />
+        <TextField fx:id="emailTextField" promptText="votre@email.com" styleClass="text-field" />
+
+        <!-- MOT DE PASSE -->
+        <Label text="Mot de passe" styleClass="field-label" maxWidth="300" />
+        <PasswordField fx:id="passwordTextField" styleClass="password-field" />
+
+        <Region prefHeight="6" />
+
+        <!-- BOUTON CONNEXION -->
+        <Button fx:id="connexionButton" text="Se connecter" styleClass="btn-primary" onMouseClicked="#handleLogin" />
+
+        <!-- MOT DE PASSE OUBLIE -->
+        <Label text="Mot de passe oublié ?" styleClass="forgot-label" />
+
+        <Region prefHeight="6" />
+
+        <!-- VERS INSCRIPTION -->
+        <HBox alignment="CENTER" spacing="4">
+            <Label text="Vous n'avez pas de compte ?" styleClass="link-label" />
+            <Label fx:id="versInscriptionLabel" text="Inscrivez vous" styleClass="link-action" onMouseClicked="#versInscriptionPage">
+                <cursor>
+                    <Cursor fx:constant="HAND" />
+                </cursor>
+            </Label>
+        </HBox>
+
+    </VBox>
+
+</StackPane>

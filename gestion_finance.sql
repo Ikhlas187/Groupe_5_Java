@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.1deb3
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1
--- Généré le : mar. 10 fév. 2026 à 16:42
--- Version du serveur : 10.4.32-MariaDB
--- Version de PHP : 8.2.12
+-- Hôte : localhost:3306
+-- Généré le : sam. 14 fév. 2026 à 18:58
+-- Version du serveur : 8.0.45-0ubuntu0.24.04.1
+-- Version de PHP : 8.3.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,9 +28,9 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `budget` (
-  `id_budget` int(11) NOT NULL,
-  `id_utilisateur` int(11) NOT NULL,
-  `id_categorie` int(11) NOT NULL,
+  `id_budget` int NOT NULL,
+  `id_utilisateur` int NOT NULL,
+  `id_categorie` int NOT NULL,
   `montant` decimal(15,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -41,9 +41,19 @@ CREATE TABLE `budget` (
 --
 
 CREATE TABLE `categorie` (
-  `id_categorie` int(11) NOT NULL,
-  `nomCategorie` varchar(100) NOT NULL
+  `id_categorie` int NOT NULL,
+  `nomCategorie` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `categorie`
+--
+
+INSERT INTO `categorie` (`id_categorie`, `nomCategorie`) VALUES
+(1, 'Alimentation'),
+(2, 'Logement'),
+(3, 'Santé'),
+(4, 'Transport');
 
 -- --------------------------------------------------------
 
@@ -52,15 +62,28 @@ CREATE TABLE `categorie` (
 --
 
 CREATE TABLE `depense` (
-  `id_depense` int(11) NOT NULL,
-  `id_utilisateur` int(11) NOT NULL,
-  `id_categorie` int(11) NOT NULL,
-  `id_sous_categorie` int(11) DEFAULT NULL,
-  `id_budget` int(11) DEFAULT NULL,
+  `id_depense` int NOT NULL,
+  `id_utilisateur` int NOT NULL,
+  `id_categorie` int NOT NULL,
+  `id_sous_categorie` int DEFAULT NULL,
+  `id_budget` int DEFAULT NULL,
   `montant` decimal(15,2) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text COLLATE utf8mb4_general_ci,
   `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `depense`
+--
+
+INSERT INTO `depense` (`id_depense`, `id_utilisateur`, `id_categorie`, `id_sous_categorie`, `id_budget`, `montant`, `description`, `date`) VALUES
+(1, 1, 1, 1, NULL, 5000.00, 'Restaurant Chez Marie', '2026-02-10'),
+(2, 1, 1, 2, NULL, 15000.00, 'Courses au marché', '2026-02-09'),
+(3, 1, 2, 4, NULL, 2000.00, 'Taxi', '2026-02-11'),
+(4, 1, 3, 7, NULL, 25000.00, 'Loyer mensuel', '2026-02-01'),
+(5, 1, 4, 12, NULL, 3000.00, 'Médicaments', '2026-02-08'),
+(6, 1, 1, 1, NULL, 8000.00, 'Déjeuner restaurant', '2026-02-12'),
+(7, 1, 2, 5, NULL, 1500.00, 'Zem', '2026-02-13');
 
 -- --------------------------------------------------------
 
@@ -69,9 +92,9 @@ CREATE TABLE `depense` (
 --
 
 CREATE TABLE `revenu` (
-  `id_revenu` int(11) NOT NULL,
-  `id_utilisateur` int(11) NOT NULL,
-  `description` text DEFAULT NULL,
+  `id_revenu` int NOT NULL,
+  `id_utilisateur` int NOT NULL,
+  `description` text COLLATE utf8mb4_general_ci,
   `montant` decimal(15,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -82,11 +105,24 @@ CREATE TABLE `revenu` (
 --
 
 CREATE TABLE `sous_categorie` (
-  `id_sous_categorie` int(11) NOT NULL,
-  `id_categorie` int(11) NOT NULL,
-  `nomSousCategorie` varchar(100) NOT NULL,
-  `description` text DEFAULT NULL
+  `id_sous_categorie` int NOT NULL,
+  `id_categorie` int NOT NULL,
+  `nomSousCategorie` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `description` text COLLATE utf8mb4_general_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `sous_categorie`
+--
+
+INSERT INTO `sous_categorie` (`id_sous_categorie`, `id_categorie`, `nomSousCategorie`, `description`) VALUES
+(1, 1, 'Restaurant', 'Repas au restaurant'),
+(2, 1, 'Courses', 'Achats au marché/supermarché'),
+(3, 2, 'Carburant', 'Essence/diesel'),
+(4, 2, 'Taxi', 'Taxi'),
+(5, 2, 'Zem', 'Moto-taxi'),
+(6, 3, 'Loyer', 'Paiement mensuel du loyer'),
+(7, 4, 'Médicaments', 'Pharmacie');
 
 -- --------------------------------------------------------
 
@@ -95,13 +131,13 @@ CREATE TABLE `sous_categorie` (
 --
 
 CREATE TABLE `utilisateur` (
-  `id_utilisateur` int(11) NOT NULL,
-  `nom` varchar(100) NOT NULL,
-  `prenom` varchar(100) NOT NULL,
-  `email` varchar(150) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `telephone` varchar(20) DEFAULT NULL,
-  `date_creation` timestamp NOT NULL DEFAULT current_timestamp()
+  `id_utilisateur` int NOT NULL,
+  `nom` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `prenom` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `telephone` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `date_creation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -169,37 +205,37 @@ ALTER TABLE `utilisateur`
 -- AUTO_INCREMENT pour la table `budget`
 --
 ALTER TABLE `budget`
-  MODIFY `id_budget` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_budget` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `categorie`
 --
 ALTER TABLE `categorie`
-  MODIFY `id_categorie` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_categorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT pour la table `depense`
 --
 ALTER TABLE `depense`
-  MODIFY `id_depense` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_depense` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pour la table `revenu`
 --
 ALTER TABLE `revenu`
-  MODIFY `id_revenu` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_revenu` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `sous_categorie`
 --
 ALTER TABLE `sous_categorie`
-  MODIFY `id_sous_categorie` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_sous_categorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pour la table `utilisateur`
 --
 ALTER TABLE `utilisateur`
-  MODIFY `id_utilisateur` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -1,0 +1,119 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 19 févr. 2026, 09:44:52
+    Author     : asteras
+*/
+
+/* ===== ROOT / BACKGROUND ===== */
+.root {
+    -fx-background-color: #9CA3D4;
+}
+
+/* ===== CARD BOX ===== */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 24, 0, 0, 6);
+    -fx-padding: 24 50 24 50;
+    -fx-spacing: 8;
+    -fx-alignment: CENTER;
+}
+
+/* ===== TITLE ===== */
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a1a2e;
+}
+
+/* ===== SUBTITLE ===== */
+.subtitle-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6b7280;
+}
+
+/* ===== FIELD LABELS ===== */
+.field-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+/* ===== TEXT FIELDS & PASSWORD FIELDS ===== */
+.text-field, .password-field {
+    -fx-background-color: #f3f4f6;
+    -fx-background-radius: 8;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 8;
+    -fx-border-width: 1.5;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 13px;
+    -fx-pref-height: 38px;
+    -fx-pref-width: 300px;
+}
+
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #f59e0b;
+    -fx-background-color: #fffbeb;
+}
+
+/* ===== PRIMARY BUTTON ===== */
+.btn-primary {
+    -fx-background-color: #f59e0b;
+    -fx-background-radius: 8;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-pref-height: 40px;
+    -fx-pref-width: 300px;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #d97706;
+}
+
+/* ===== LINK LABELS ===== */
+.link-label {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 12px;
+}
+
+.link-action {
+    -fx-text-fill: #ef4444;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+
+.link-action:hover {
+    -fx-text-fill: #b91c1c;
+    -fx-underline: true;
+}
+
+/* ===== FORGOT PASSWORD ===== */
+.forgot-label {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 12px;
+}
+
+/* ===== COMBO BOX & SPINNER ===== */
+.combo-box, .spinner {
+    -fx-background-color: #f3f4f6;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-border-width: 1.5;
+    -fx-pref-height: 38px;
+    -fx-pref-width: 300px;
+    -fx-font-size: 13px;
+}
+
+/* ===== SEPARATOR ===== */
+.separator-line {
+    -fx-background-color: #e5e7eb;
+    -fx-pref-height: 1;
+    -fx-pref-width: 300px;
+}
