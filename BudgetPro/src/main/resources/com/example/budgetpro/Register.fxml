@@ -21,7 +21,7 @@
     prefHeight="751.0"
     prefWidth="676.0"
     styleClass="root"
-    stylesheets="@/com/example/budgetpro/styles/authentification.css"
+    stylesheets="@styles/authentification.css"
     xmlns="http://javafx.com/javafx/25"
     xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.example.budgetpro.pages.Register">
