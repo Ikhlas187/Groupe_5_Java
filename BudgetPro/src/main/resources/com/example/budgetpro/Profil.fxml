@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.budgetpro.pages.Profil"
+            prefHeight="700.0" prefWidth="900.0"
+            style="-fx-background-color: #f7fafc;">
+
+    <!-- EN-TÊTE -->
+    <top>
+        <VBox style="-fx-background-color: white; -fx-padding: 20;">
+            <Label text="Profil et Paramètres"
+                   style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2d3748;">
+                <font>
+                    <Font name="System Bold" size="24.0" />
+                </font>
+            </Label>
+        </VBox>
+    </top>
+
+    <!-- CONTENU PRINCIPAL -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;">
+            <VBox spacing="20" style="-fx-padding: 20;">
+
+                <!-- SECTION 1 : INFORMATIONS PROFIL -->
+                <VBox spacing="15"
+                      style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+
+                    <Label text="Informations personnelles"
+                           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2d3748;">
+                        <font>
+                            <Font name="System Bold" size="18.0" />
+                        </font>
+                    </Label>
+
+                    <HBox spacing="30" alignment="CENTER_LEFT">
+                        <!-- Avatar -->
+                        <VBox alignment="CENTER" spacing="10">
+                            <Circle radius="60" fill="#667eea" />
+                            <Label fx:id="avatarLabel" text="AD"
+                                   style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white;"
+                                   translateY="-80">
+                                <font>
+                                    <Font name="System Bold" size="32.0" />
+                                </font>
+                            </Label>
+                        </VBox>
+
+                        <!-- Infos -->
+                        <GridPane hgap="30" vgap="15" HBox.hgrow="ALWAYS">
+                            <!-- Nom -->
+                            <Label text="Nom complet :" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                                   style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #718096;" />
+                            <Label fx:id="nomLabel" text="Asteras Dossou" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                   style="-fx-font-size: 14px; -fx-text-fill: #2d3748;" />
+
+                            <!-- Email -->
+                            <Label text="Email :" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                                   style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #718096;" />
+                            <Label fx:id="emailLabel" text="asteras@example.com" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                   style="-fx-font-size: 14px; -fx-text-fill: #2d3748;" />
+
+                            <!-- Téléphone -->
+                            <Label text="Téléphone :" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                                   style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #718096;" />
+                            <Label fx:id="telephoneLabel" text="+229 XX XX XX XX" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                                   style="-fx-font-size: 14px; -fx-text-fill: #2d3748;" />
+
+                            <!-- Âge -->
+                            <Label text="Âge :" GridPane.columnIndex="0" GridPane.rowIndex="3"
+                                   style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #718096;" />
+                            <Label fx:id="ageLabel" text="25 ans" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                                   style="-fx-font-size: 14px; -fx-text-fill: #2d3748;" />
+                        </GridPane>
+                    </HBox>
+
+                    <Button text="Modifier le profil"
+                            onAction="#handleModifierProfil"
+                            style="-fx-background-color: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 12 24; -fx-cursor: hand;">
+                        <font>
+                            <Font name="System Bold" size="14.0" />
+                        </font>
+                    </Button>
+                </VBox>
+
+                <!-- SECTION 2 : STATISTIQUES -->
+                <HBox spacing="15">
+                    <!-- Solde actuel -->
+                    <VBox spacing="10" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #f5f3ff; -fx-background-radius: 12; -fx-padding: 20; -fx-alignment: center;">
+                        <Label text="Solde actuel"
+                               style="-fx-font-size: 12px; -fx-text-fill: #718096;" />
+                        <Label fx:id="soldeLabel" text="0 XOF"
+                               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #667eea;">
+                            <font>
+                                <Font name="System Bold" size="24.0" />
+                            </font>
+                        </Label>
+                    </VBox>
+
+                    <!-- Dépenses ce mois -->
+                    <VBox spacing="10" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #fff5f5; -fx-background-radius: 12; -fx-padding: 20; -fx-alignment: center;">
+                        <Label text="Dépenses ce mois"
+                               style="-fx-font-size: 12px; -fx-text-fill: #718096;" />
+                        <Label fx:id="depensesLabel" text="0 XOF"
+                               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #e53e3e;">
+                            <font>
+                                <Font name="System Bold" size="24.0" />
+                            </font>
+                        </Label>
+                    </VBox>
+
+                    <!-- Revenus ce mois -->
+                    <VBox spacing="10" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #f0fff4; -fx-background-radius: 12; -fx-padding: 20; -fx-alignment: center;">
+                        <Label text="Revenus ce mois"
+                               style="-fx-font-size: 12px; -fx-text-fill: #718096;" />
+                        <Label fx:id="revenusLabel" text="0 XOF"
+                               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #38a169;">
+                            <font>
+                                <Font name="System Bold" size="24.0" />
+                            </font>
+                        </Label>
+                    </VBox>
+                </HBox>
+
+                <!-- SECTION 3 : PARAMÈTRES -->
+                <VBox spacing="15"
+                      style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+
+                    <Label text="Paramètres"
+                           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2d3748;">
+                        <font>
+                            <Font name="System Bold" size="18.0" />
+                        </font>
+                    </Label>
+
+                    <!-- Mode sombre -->
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="🌙 Mode sombre"
+                               style="-fx-font-size: 14px; -fx-text-fill: #2d3748;"
+                               HBox.hgrow="ALWAYS" />
+                        <CheckBox fx:id="darkModeToggle"
+                                  onAction="#handleDarkModeToggle" />
+                    </HBox>
+
+                    <Separator />
+
+                    <!-- Notifications -->
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="🔔 Notifications"
+                               style="-fx-font-size: 14px; -fx-text-fill: #2d3748;"
+                               HBox.hgrow="ALWAYS" />
+                        <CheckBox fx:id="notificationsToggle" selected="true" />
+                    </HBox>
+
+                </VBox>
+
+                <!-- SECTION 4 : ACTIONS -->
+                <HBox spacing="15">
+                    <Button text="Changer le mot de passe"
+                            onAction="#handleChangerMotDePasse"
+                            style="-fx-background-color: #4a5568; -fx-text-fill: white; -fx-background-radius: 10; -fx-padding: 12 24; -fx-cursor: hand;">
+                        <font>
+                            <Font name="System Bold" size="14.0" />
+                        </font>
+                    </Button>
+
+                    <Button text="Se déconnecter"
+                            onAction="#handleDeconnexion"
+                            style="-fx-background-color: #FF9500; -fx-text-fill: white; -fx-background-radius: 10; -fx-padding: 12 24; -fx-cursor: hand;">
+                        <font>
+                            <Font name="System Bold" size="14.0" />
+                        </font>
+                    </Button>
+
+                    <Region HBox.hgrow="ALWAYS" />
+
+                    <Label text="Supprimer le compte"
+                           onMouseClicked="#handleSupprimerCompte"
+                           style="-fx-text-fill: #e53e3e; -fx-font-size: 13px; -fx-cursor: hand; -fx-underline: true;" />
+                </HBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

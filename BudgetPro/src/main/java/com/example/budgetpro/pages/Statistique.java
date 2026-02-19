@@ -10,10 +10,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import java.util.Map;
-/**
- *
- * @author asteras
- */
 
 public class Statistique {
 
@@ -37,9 +33,6 @@ public class Statistique {
         loadLineChart();
     }
 
-    /**
-     * Charger le Pie Chart (Répartition par catégorie)
-     */
     private void loadPieChart() {
         ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList();
 
@@ -55,9 +48,6 @@ public class Statistique {
         System.out.println("Pie Chart chargé");
     }
 
-    /**
-     * Charger le Bar Chart (Dépenses hebdomadaires)
-     */
     private void loadBarChart() {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Dépenses");
@@ -73,11 +63,7 @@ public class Statistique {
         System.out.println("Bar Chart chargé");
     }
 
-    /**
-     * Charger le Line Chart (Tendance mensuelle)
-     */
     private void loadLineChart() {
-        // Série Dépenses
         XYChart.Series<String, Number> seriesDepenses = new XYChart.Series<>();
         seriesDepenses.setName("Dépenses");
 
@@ -86,7 +72,6 @@ public class Statistique {
             seriesDepenses.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
         }
 
-        // Série Revenus
         XYChart.Series<String, Number> seriesRevenus = new XYChart.Series<>();
         seriesRevenus.setName("Revenus");
 

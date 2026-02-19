@@ -12,6 +12,7 @@ public class StatistiqueDAO {
 
     /**
      * Total des dépenses par catégorie pour un utilisateur
+     * @return 
      */
     public Map<String, Double> getDepensesParCategorie(int userId) {
         Map<String, Double> data = new LinkedHashMap<>();
