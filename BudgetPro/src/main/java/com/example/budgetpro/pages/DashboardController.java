@@ -260,10 +260,15 @@ public class DashboardController {
         HBox header = new HBox(15);
         header.setAlignment(Pos.CENTER_LEFT);
 
+        String couleur = CategorieIcon.getCouleur(categorie.getNomCategorie());
+        Region colorBar = new Region();
+        colorBar.setPrefSize(4, 30);
+        colorBar.setStyle("-fx-background-color: " + couleur + "; -fx-background-radius: 2;");
+
         // Nom de la catégorie
         Label nomLabel = new Label(categorie.getNomCategorie());
         nomLabel.setFont(Font.font("System Bold", 18));
-        nomLabel.setStyle("-fx-text-fill: #2196F3;");
+        nomLabel.setStyle("-fx-text-fill: " + couleur + ";");
 
         // Spacer pour pousser les montants à droite
         Region spacer = new Region();
@@ -283,7 +288,7 @@ public class DashboardController {
 
         // Label budget alloué
         Label budgetLabel = new Label(String.format("%.0f XOF", budgetAlloue));
-        budgetLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        budgetLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-cursor: hand;");
         budgetLabel.setOnMouseClicked(e -> editBudget(budget, budgetLabel));
         budgetLabel.setStyle(budgetLabel.getStyle() + "-fx-cursor: hand;");
 
@@ -305,44 +310,44 @@ public class DashboardController {
         List<SousCategorie> sousCategories = CategorieService.getSousCategoriesByCategorie(categorie.getIdCategorie());
 
         for (SousCategorie sousCat : sousCategories) {
-            HBox ligne = createSousCategorieRow(sousCat);
+            HBox ligne = createSousCategorieRow(sousCat,categorie);
             card.getChildren().add(ligne);
         }
 
         // ========== BOUTON AJOUTER SOUS-CATÉGORIE ==========
         Button btnAddSousCat = new Button("➕ Ajouter une sous-catégorie");
         btnAddSousCat.setStyle("-fx-background-color: transparent; -fx-text-fill: #666; -fx-cursor: hand;");
-        btnAddSousCat.setOnAction(e -> {
-            System.out.println("Ajouter sous-catégorie à : " + categorie.getNomCategorie());
-            // TODO: Implémenter dialogue d'ajout
-        });
-
+        btnAddSousCat.setOnAction(e -> ajouterSousCategorieDialog(categorie));
         card.getChildren().add(btnAddSousCat);
-
         return card;
     }
 
     /**
      * Crée une ligne de sous-catégorie
      */
-    private HBox createSousCategorieRow(SousCategorie sousCat) {
+    private HBox createSousCategorieRow(SousCategorie sousCat, Categorie categorie) {
         HBox row = new HBox(15);
         row.setAlignment(Pos.CENTER_LEFT);
         row.setStyle("-fx-padding: 5 0;");
 
-        // Icône
-        Label iconLabel = new Label("🍴");
-        iconLabel.setStyle("-fx-font-size: 18px;");
+        // 🎯 ICÔNE THÉMATIQUE
+        String icone = CategorieIcon.getIcone(sousCat.getNomSousCategorie());
+        String couleur = CategorieIcon.getCouleur(categorie.getNomCategorie());
 
-        // Nom de la sous-catégorie
+        Label iconLabel = new Label(icone);
+        iconLabel.setStyle("-fx-font-size: 20px;");
+
+        // 🎯 PASTILLE DE COULEUR (optionnel - pour plus de clarté)
+        Region colorDot = new Region();
+        colorDot.setPrefSize(8, 8);
+        colorDot.setStyle("-fx-background-color: " + couleur + "; -fx-background-radius: 50%;");
+
         Label nomLabel = new Label(sousCat.getNomSousCategorie());
         nomLabel.setStyle("-fx-font-size: 14px;");
 
-        // Spacer
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        // Calculer le total des dépenses pour cette sous-catégorie
         int userId = AuthServices.getCurrentUser().getId();
         double totalDepenses = DepenseService.getTotalDepensesSousCategorie(
                 userId,
@@ -350,24 +355,26 @@ public class DashboardController {
                 currentMonth
         );
 
-        // Label du montant
         Label montantLabel = new Label(String.format("%.0f XOF", totalDepenses));
         montantLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-        // Bouton + pour ajouter une dépense
+        // 🎯 BOUTON "+" AVEC LA COULEUR DE LA CATÉGORIE
         Button btnPlus = new Button("+");
         btnPlus.setPrefSize(30, 30);
-        btnPlus.setStyle("-fx-background-color: #333; -fx-text-fill: white; " +
-                "-fx-background-radius: 50%; -fx-cursor: hand;");
-        btnPlus.setOnAction(e -> {
-            ajouterDepenseDialog(sousCat);
-        });
+        btnPlus.setStyle(
+                "-fx-background-color: " + couleur + "; " +
+                        "-fx-text-fill: white; " +
+                        "-fx-background-radius: 50%; " +
+                        "-fx-cursor: hand; " +
+                        "-fx-font-size: 16px; " +
+                        "-fx-font-weight: bold;"
+        );
+        btnPlus.setOnAction(e -> ajouterDepenseDialog(sousCat));
 
-        row.getChildren().addAll(iconLabel, nomLabel, spacer, montantLabel, btnPlus);
+        row.getChildren().addAll(iconLabel, colorDot, nomLabel, spacer, montantLabel, btnPlus);
 
         return row;
     }
-
     // ========================================
     // ACTIONS
     // ========================================
@@ -720,6 +727,41 @@ public class DashboardController {
 
             } catch (NumberFormatException e) {
                 showAlert("Erreur", "Montant invalide !", Alert.AlertType.ERROR);
+            }
+        });
+    }
+
+    /**
+     * Dialogue pour ajouter une sous-catégorie
+     */
+    private void ajouterSousCategorieDialog(Categorie categorie) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Ajouter une sous-catégorie");
+        dialog.setHeaderText("Catégorie : " + categorie.getNomCategorie());
+        dialog.setContentText("Nom de la sous-catégorie :");
+
+        dialog.showAndWait().ifPresent(nom -> {
+            if (nom == null || nom.trim().isEmpty()) {
+                showAlert("Erreur", "Le nom ne peut pas être vide", Alert.AlertType.ERROR);
+                return;
+            }
+
+            if (nom.trim().length() < 2) {
+                showAlert("Erreur", "Le nom doit contenir au moins 2 caractères", Alert.AlertType.ERROR);
+                return;
+            }
+
+            boolean success = CategorieService.ajouterSousCategorie(nom.trim(), categorie.getIdCategorie());
+
+            if (success) {
+                loadCategories();
+                showAlert("Succès",
+                        "Sous-catégorie \"" + nom.trim() + "\" ajoutée à " + categorie.getNomCategorie(),
+                        Alert.AlertType.INFORMATION);
+            } else {
+                showAlert("Erreur",
+                        "Cette sous-catégorie existe déjà ou une erreur s'est produite",
+                        Alert.AlertType.ERROR);
             }
         });
     }

@@ -168,4 +168,35 @@ public class CategorieService {
         return null;
     }
 
+    public static boolean ajouterSousCategorie(String nomSousCategorie, int categorieId) {
+        try {
+            Connection conn = Database.getConnection();
+
+            // Vérifier si la sous-catégorie existe déjà
+            String checkSql = "SELECT id_sous_categorie FROM sous_categorie WHERE nom_sous_categorie = ? AND id_categorie = ?";
+            PreparedStatement checkStmt = conn.prepareStatement(checkSql);
+            checkStmt.setString(1, nomSousCategorie);
+            checkStmt.setInt(2, categorieId);
+            ResultSet rs = checkStmt.executeQuery();
+
+            if (rs.next()) {
+                System.out.println("⚠️ Cette sous-catégorie existe déjà");
+                return false;
+            }
+
+            // Créer la sous-catégorie
+            String insertSql = "INSERT INTO sous_categorie (nom_sous_categorie, id_categorie) VALUES (?, ?)";
+            PreparedStatement insertStmt = conn.prepareStatement(insertSql);
+            insertStmt.setString(1, nomSousCategorie);
+            insertStmt.setInt(2, categorieId);
+
+            int rows = insertStmt.executeUpdate();
+            return rows > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
