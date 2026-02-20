@@ -110,11 +110,17 @@ public class Register {
         }
     }*/
 
-    private void showAlert(String title, String message, Alert.AlertType type) {
+    public static void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    @FXML
+    private void versConnexionPage (MouseEvent event){
+        SceneSwitcher.switchScene("/com/example/budgetpro/Login.fxml",(Node) event.getSource());
+    }
+
 }

@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class Revenu {
     private int idRevenu;
     private String description;
-    private int montant;
+    private double montant;
     private LocalDate date;
     private int categorieId;
     private int userId;// Référence vers Categorie (relation 1:n)
@@ -14,7 +14,7 @@ public class Revenu {
     public Revenu() {}
 
     // Constructeur avec paramètres
-    public Revenu(String description, int montant, LocalDate date, int categorieId, int userId) {
+    public Revenu(String description, double montant, LocalDate date, int categorieId, int userId) {
         this.description = description;
         this.montant = montant;
         this.date = date;
@@ -25,7 +25,7 @@ public class Revenu {
     // Getters
     public int getIdRevenu() { return idRevenu; }
     public String getDescription() { return description; }
-    public int getMontant() { return montant; }
+    public double getMontant() { return montant; }
     public LocalDate getDate() { return date; }
     public int getCategorieId() { return categorieId; }
     public int getUserId() {return userId;}
@@ -33,7 +33,7 @@ public class Revenu {
     // Setters
     public void setIdRevenu(int idRevenu) { this.idRevenu = idRevenu; }
     public void setDescription(String description) { this.description = description; }
-    public void setMontant(int montant) { this.montant = montant; }
+    public void setMontant(double montant) { this.montant = montant; }
     public void setDate(LocalDate date) { this.date = date; }
     public void setCategorieId(int categorieId) { this.categorieId = categorieId; }
     public void setUserId(int userId) {this.userId = userId;}

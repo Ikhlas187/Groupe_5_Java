@@ -99,7 +99,7 @@
         <!-- VERS CONNEXION -->
         <HBox alignment="CENTER" spacing="4">
             <Label text="Vous avez déjà  un compte ?" styleClass="link-label" />
-            <Label fx:id="labelVersConnexion" text="Connectez-vous" styleClass="link-action">
+            <Label fx:id="labelVersConnexion" text="Connectez-vous" styleClass="link-action" onMouseClicked="#versConnexionPage">
                 <cursor>
                     <Cursor fx:constant="HAND" />
                 </cursor>

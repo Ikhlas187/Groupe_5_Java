@@ -33,6 +33,7 @@ public class DashboardController {
     @FXML private Button btnHistory;
     @FXML private Button btnStatistics;
     @FXML private Button btnSettings;
+    @FXML private Button btnAjouterRevenu;
 
     // ========================================
     // VARIABLES INTERNES
@@ -43,6 +44,7 @@ public class DashboardController {
     private VBox categoriesContainer;
     private Label budgetTotalLabel;
     private Label budgetRemainingLabel;
+    private Label revenusLabel;
 
     // ========================================
     // INITIALISATION
@@ -55,6 +57,9 @@ public class DashboardController {
             try {
                 usernameLabel.setText(AuthServices.getCurrentUser().getFullName());
                 System.out.println("Nom chargé");
+                if (btnAjouterRevenu != null) {
+                    btnAjouterRevenu.setOnAction(e -> ajouterRevenuDialog());
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -82,8 +87,8 @@ public class DashboardController {
      */
     private void loadDashboardContent() {
         // Container principal
-        VBox mainContainer = new VBox(30);
-        mainContainer.setStyle("-fx-background-color: #F5F5F5; -fx-padding: 30 40;");
+        VBox mainContainer = new VBox(20);  // ✅ Réduit de 30 à 20
+        mainContainer.setStyle("-fx-background-color: #F5F5F5; -fx-padding: 20 30;");
 
         // Header avec navigation mois
         HBox header = createMonthNavigation();
@@ -179,23 +184,37 @@ public class DashboardController {
     /**
      * Crée le cercle de budget global
      */
+    /**
+     * Crée le cercle de budget avec budget initial, revenus et restant
+     */
     private VBox createBudgetCircle() {
-        VBox container = new VBox(10);
+        VBox container = new VBox(5);
         container.setAlignment(Pos.CENTER);
 
-        // Labels qui seront mis à jour
-        budgetTotalLabel = new Label(BudgetService.getBudgetInitial(AuthServices.getCurrentUser().getId())+" XOF");
+        // ========================================
+        // ÉTAPE 1 : CRÉER TOUS LES LABELS
+        // ========================================
+
+        // Budget initial (en haut)
+        budgetTotalLabel = new Label("0 XOF");
         budgetTotalLabel.setFont(Font.font("System Bold", 28));
+        budgetTotalLabel.setStyle("-fx-cursor: hand;");
         budgetTotalLabel.setOnMouseClicked(e -> editBudgetInitial());
 
-        budgetRemainingLabel = new Label("5 XOF");
+        // Revenus du mois (au milieu, en vert)
+        revenusLabel = new Label("+ 0 XOF");
+        revenusLabel.setFont(Font.font("System", 14));
+        revenusLabel.setStyle("-fx-text-fill: #4CAF50;");
+
+        // Budget restant (en bas)
+        budgetRemainingLabel = new Label("0 XOF");
         budgetRemainingLabel.setStyle("-fx-text-fill: #666;");
         budgetRemainingLabel.setFont(Font.font(16));
 
-        // Calculer les totaux
+        container.getChildren().addAll(budgetTotalLabel, revenusLabel, budgetRemainingLabel);
+
         updateBudgetCircle();
 
-        container.getChildren().addAll(budgetTotalLabel, budgetRemainingLabel);
         return container;
     }
 
@@ -210,14 +229,20 @@ public class DashboardController {
         // 🎯 RÉCUPÉRER LE BUDGET INITIAL (solde de départ)
         double budgetInitial = BudgetService.getBudgetInitial(userId);
 
+        // 🎯 REVENUS DU MOIS
+        double revenusMois = RevenuService.getTotalRevenusMois(userId, currentMonth);
+
         // 🎯 CALCULER LE TOTAL DES DÉPENSES
         double depensesTotal = DepenseService.getTotalDepensesMois(userId, currentMonth);
 
+        double budgetDisponible = budgetInitial + revenusMois;
+
         // 🎯 CALCULER LE RESTANT
-        double restant = budgetInitial - depensesTotal;
+        double restant = budgetDisponible- depensesTotal;
 
         // 🎯 AFFICHAGE
-        budgetTotalLabel.setText(String.format("%.0f XOF", budgetInitial));    // Label du HAUT
+        budgetTotalLabel.setText(String.format("%.0f XOF", budgetInitial));
+        revenusLabel.setText("+ " + String.format("%.0f XOF", revenusMois));// Label du HAUT
         budgetRemainingLabel.setText(String.format("%.0f XOF", restant));       // Label du BAS
 
         // 🎯 COULEUR DU RESTANT
@@ -254,102 +279,103 @@ public class DashboardController {
      * Crée une carte de catégorie
      */
     private VBox createCategorieCard(Categorie categorie) {
-        VBox card = new VBox(15);
-        card.setStyle("-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 20; " +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);");
+        VBox card = new VBox(10);  // ✅ Réduit de 15 à 10
+        card.setStyle(
+                "-fx-background-color: white; " +
+                        "-fx-background-radius: 10; " +  // ✅ Réduit de 15 à 10
+                        "-fx-padding: 15; " +  // ✅ Réduit de 20 à 15
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);"  // ✅ Ombre plus légère
+        );
 
         // ========== HEADER : Nom + Budget + Restant ==========
-        HBox header = new HBox(15);
+        HBox header = new HBox(10);  // ✅ Réduit de 15 à 10
         header.setAlignment(Pos.CENTER_LEFT);
 
+        // 🎯 RÉCUPÉRER LA COULEUR
         String couleur = CategorieIcon.getCouleur(categorie.getNomCategorie());
-        Region colorBar = new Region();
-        colorBar.setPrefSize(4, 30);
-        colorBar.setStyle("-fx-background-color: " + couleur + "; -fx-background-radius: 2;");
 
-        // Nom de la catégorie
+        // Nom de la catégorie avec sa couleur
         Label nomLabel = new Label(categorie.getNomCategorie());
-        nomLabel.setFont(Font.font("System Bold", 18));
+        nomLabel.setFont(Font.font("System Bold", 16));  // ✅ Réduit de 18 à 16
         nomLabel.setStyle("-fx-text-fill: " + couleur + ";");
 
-        // Spacer pour pousser les montants à droite
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        // Récupérer le budget de cette catégorie pour le mois actuel
         int userId = AuthServices.getCurrentUser().getId();
         Budget budget = BudgetService.getBudgetCategorieParMois(userId, categorie.getIdCategorie(), currentMonth);
 
         double budgetAlloue = (budget != null) ? budget.getMontant() : 0.0;
-
-        // Calculer les dépenses totales de cette catégorie
         double totalDepenses = DepenseService.getTotalDepensesCategorie(userId, categorie.getIdCategorie(), currentMonth);
-
-        // Calculer le restant
         double budgetRestant = budgetAlloue - totalDepenses;
 
         // Label budget alloué
         Label budgetLabel = new Label(String.format("%.0f XOF", budgetAlloue));
-        budgetLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-cursor: hand;");
+        budgetLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-cursor: hand;");  // ✅ Réduit de 14 à 13
         budgetLabel.setOnMouseClicked(e -> editBudget(budget, budgetLabel));
-        budgetLabel.setStyle(budgetLabel.getStyle() + "-fx-cursor: hand;");
 
         // Label budget restant
         Label restantLabel = new Label(String.format("%.0f XOF", budgetRestant));
-        restantLabel.setStyle("-fx-font-size: 14px;");
+        restantLabel.setStyle("-fx-font-size: 13px;");  // ✅ Réduit de 14 à 13
 
-        // Colorer en rouge si dépassé
         if (budgetRestant < 0) {
             restantLabel.setStyle(restantLabel.getStyle() + "-fx-text-fill: #F44336;");
         } else {
             restantLabel.setStyle(restantLabel.getStyle() + "-fx-text-fill: #4CAF50;");
         }
 
-        header.getChildren().addAll(nomLabel, spacer, budgetLabel, restantLabel);
+        header.getChildren().addAll(nomLabel, spacer, budgetLabel, restantLabel);  // ✅ SANS colorBar
         card.getChildren().add(header);
 
         // ========== SOUS-CATÉGORIES ==========
         List<SousCategorie> sousCategories = CategorieService.getSousCategoriesByCategorie(categorie.getIdCategorie());
 
         for (SousCategorie sousCat : sousCategories) {
-            HBox ligne = createSousCategorieRow(sousCat,categorie);
+            HBox ligne = createSousCategorieRow(sousCat, categorie);
             card.getChildren().add(ligne);
         }
 
         // ========== BOUTON AJOUTER SOUS-CATÉGORIE ==========
         Button btnAddSousCat = new Button("➕ Ajouter une sous-catégorie");
-        btnAddSousCat.setStyle("-fx-background-color: transparent; -fx-text-fill: #666; -fx-cursor: hand;");
+        btnAddSousCat.setStyle(
+                "-fx-background-color: transparent; " +
+                        "-fx-text-fill: #999; " +  // ✅ Couleur plus claire
+                        "-fx-cursor: hand; " +
+                        "-fx-font-size: 12px; " +  // ✅ Plus petit
+                        "-fx-padding: 5 0;"
+        );
         btnAddSousCat.setOnAction(e -> ajouterSousCategorieDialog(categorie));
+
         card.getChildren().add(btnAddSousCat);
         return card;
     }
-
     /**
      * Crée une ligne de sous-catégorie
      */
     private HBox createSousCategorieRow(SousCategorie sousCat, Categorie categorie) {
-        HBox row = new HBox(15);
+        HBox row = new HBox(12);  // ✅ Réduit de 15 à 12
         row.setAlignment(Pos.CENTER_LEFT);
-        row.setStyle("-fx-padding: 5 0;");
+        row.setStyle("-fx-padding: 3 0;");  // ✅ Réduit de 5 à 3
 
-        // 🎯 ICÔNE THÉMATIQUE
+        // 🎯 RÉCUPÉRER COULEUR ET ICÔNE
         String icone = CategorieIcon.getIcone(sousCat.getNomSousCategorie());
         String couleur = CategorieIcon.getCouleur(categorie.getNomCategorie());
 
+        // 🎯 ICÔNE COLORÉE (via un Label avec style)
         Label iconLabel = new Label(icone);
-        iconLabel.setStyle("-fx-font-size: 20px;");
+        iconLabel.setStyle(
+                "-fx-font-size: 18px; " +  // ✅ Réduit de 20 à 18
+                        "-fx-text-fill: " + couleur + ";"  // ✅ COULEUR DIRECTEMENT SUR L'ICÔNE
+        );
 
-        // 🎯 PASTILLE DE COULEUR (optionnel - pour plus de clarté)
-        Region colorDot = new Region();
-        colorDot.setPrefSize(8, 8);
-        colorDot.setStyle("-fx-background-color: " + couleur + "; -fx-background-radius: 50%;");
-
+        // Nom de la sous-catégorie
         Label nomLabel = new Label(sousCat.getNomSousCategorie());
-        nomLabel.setStyle("-fx-font-size: 14px;");
+        nomLabel.setStyle("-fx-font-size: 13px;");  // ✅ Réduit de 14 à 13
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
+        // Montant des dépenses
         int userId = AuthServices.getCurrentUser().getId();
         double totalDepenses = DepenseService.getTotalDepensesSousCategorie(
                 userId,
@@ -358,27 +384,26 @@ public class DashboardController {
         );
 
         Label montantLabel = new Label(String.format("%.0f XOF", totalDepenses));
-        montantLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        montantLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold;");  // ✅ Réduit de 14 à 13
 
-        // 🎯 BOUTON "+" AVEC LA COULEUR DE LA CATÉGORIE
+        // 🎯 BOUTON "+" AVEC COULEUR DE LA CATÉGORIE
         Button btnPlus = new Button("+");
-        btnPlus.setPrefSize(30, 30);
+        btnPlus.setPrefSize(26, 26);  // ✅ Réduit de 30 à 26
         btnPlus.setStyle(
                 "-fx-background-color: " + couleur + "; " +
                         "-fx-text-fill: white; " +
                         "-fx-background-radius: 50%; " +
                         "-fx-cursor: hand; " +
-                        "-fx-font-size: 16px; " +
+                        "-fx-font-size: 14px; " +  // ✅ Réduit de 16 à 14
                         "-fx-font-weight: bold;"
         );
         btnPlus.setOnAction(e -> ajouterDepenseDialog(sousCat));
 
-        row.getChildren().addAll(iconLabel, colorDot, nomLabel, spacer, montantLabel, btnPlus);
+        // ✅ SANS colorDot - juste icône colorée directement
+        row.getChildren().addAll(iconLabel, nomLabel, spacer, montantLabel, btnPlus);
 
         return row;
     }
-    // ========================================
-    // ACTIONS
     // ========================================
 
     /**
@@ -872,6 +897,123 @@ public class DashboardController {
         });
     }
 
+
+    /**
+     * Dialogue pour ajouter un revenu
+     */
+   @FXML public void ajouterRevenuDialog() {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Ajouter un revenu");
+        dialog.setHeaderText("💰 Nouveau revenu");
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20));
+
+        TextField montantField = new TextField();
+        montantField.setPromptText("Montant (XOF)");
+
+        TextField descriptionField = new TextField();
+        descriptionField.setPromptText("Ex: Salaire, Prime, Freelance...");
+
+        DatePicker datePicker = new DatePicker(LocalDate.now());
+
+        // 🎯 BLOQUER LES DATES FUTURES
+        datePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                if (date != null && date.isAfter(LocalDate.now())) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #ffcccc;");
+                }
+            }
+        });
+
+        grid.add(new Label("Montant * :"), 0, 0);
+        grid.add(montantField, 1, 0);
+        grid.add(new Label("Description * :"), 0, 1);
+        grid.add(descriptionField, 1, 1);
+        grid.add(new Label("Date :"), 0, 2);
+        grid.add(datePicker, 1, 2);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        // Focus sur le champ montant
+        Platform.runLater(() -> montantField.requestFocus());
+
+        dialog.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    String montantStr = montantField.getText();
+                    String description = descriptionField.getText();
+                    LocalDate date = datePicker.getValue();
+
+                    // 🎯 VALIDATION 1 : Montant obligatoire
+                    if (montantStr == null || montantStr.trim().isEmpty()) {
+                        showAlert("Erreur", "Le montant est obligatoire", Alert.AlertType.ERROR);
+                        return;
+                    }
+
+                    double montant = Double.parseDouble(montantStr);
+
+                    // 🎯 VALIDATION 2 : Montant positif
+                    if (montant <= 0) {
+                        showAlert("Erreur", "Le montant doit être positif", Alert.AlertType.ERROR);
+                        return;
+                    }
+
+                    // 🎯 VALIDATION 3 : Description obligatoire
+                    if (description == null || description.trim().isEmpty()) {
+                        showAlert("Erreur", "La description est obligatoire", Alert.AlertType.ERROR);
+                        return;
+                    }
+
+                    // 🎯 VALIDATION 4 : Date dans le mois actuel (avec confirmation)
+                    YearMonth dateMonth = YearMonth.from(date);
+                    if (!dateMonth.equals(currentMonth)) {
+                        Alert confirm = new Alert(Alert.AlertType.WARNING);
+                        confirm.setTitle("Date hors du mois actuel");
+                        confirm.setHeaderText("Confirmation requise");
+                        confirm.setContentText(
+                                "La date sélectionnée (" + date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.FRENCH)) +
+                                        ") n'est pas dans le mois actuel (" +
+                                        currentMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.FRENCH)) + ").\n\n" +
+                                        "Le revenu sera comptabilisé dans le mois de la date sélectionnée.\n\n" +
+                                        "Voulez-vous continuer ?"
+                        );
+
+                        Optional<ButtonType> result = confirm.showAndWait();
+                        if (result.isEmpty() || result.get() != ButtonType.OK) {
+                            return;
+                        }
+                    }
+
+                    int userId = AuthServices.getCurrentUser().getId();
+
+                    // 🎯 AJOUT DU REVENU
+                    boolean success = RevenuService.ajouterRevenu(montant, description.trim(), date, userId);
+
+                    if (success) {
+                        // Recharger l'interface
+                        updateBudgetCircle();
+
+                        showAlert("Succès",
+                                "Revenu de " + String.format("%.0f", montant) + " XOF ajouté !\n" +
+                                        "Description : " + description.trim(),
+                                Alert.AlertType.INFORMATION);
+                    } else {
+                        showAlert("Erreur", "Impossible d'ajouter le revenu", Alert.AlertType.ERROR);
+                    }
+
+                } catch (NumberFormatException ex) {
+                    showAlert("Erreur", "Montant invalide ! Entrez un nombre.", Alert.AlertType.ERROR);
+                }
+            }
+        });
+    }
 
 
 }

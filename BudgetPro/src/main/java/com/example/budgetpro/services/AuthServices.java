@@ -2,8 +2,13 @@ package com.example.budgetpro.services;
 import com.example.budgetpro.models.User;
 import java.sql.*;
 import java.time.LocalDateTime;
+
+import com.example.budgetpro.pages.DashboardController;
+import com.example.budgetpro.pages.Register;
 import com.example.budgetpro.services.Database;
 import com.example.budgetpro.services.BudgetService;
+import javafx.scene.control.Alert;
+
 import java.time.YearMonth;
 import java.util.regex.Pattern;
 
@@ -119,6 +124,7 @@ public class AuthServices {
 
         if (password.length() < 6) {
             System.out.println("❌ Mot de passe trop court (min 6 caractères)");
+            Register.showAlert("Erreur ","Le  mot de passe doit avoir plus de six caractéres ", Alert.AlertType.INFORMATION);
             return false;
         }
 
