@@ -2,6 +2,7 @@ package com.example.budgetpro.pages;
 
 import com.example.budgetpro.models.*;
 import com.example.budgetpro.services.*;
+import com.example.budgetpro.dao.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,19 +14,21 @@ import javafx.scene.text.Font;
 import java.util.Optional;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
-
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.*;
 import java.util.Locale;
 
 public class DashboardController {
 
-    // ========================================
-    // ÉLÉMENTS FXML (Sidebar)
-    // ========================================
+
 
     @FXML private StackPane contentArea;
     @FXML private Label usernameLabel;
@@ -45,6 +48,7 @@ public class DashboardController {
     private Label budgetTotalLabel;
     private Label budgetRemainingLabel;
     private Label revenusLabel;
+    private Canvas budgetCanvas;
 
     // ========================================
     // INITIALISATION
@@ -78,13 +82,8 @@ public class DashboardController {
         BudgetService.initBudgetsMois(userId, currentMonth);
     }
 
-    // ========================================
-    // CHARGEMENT DU CONTENU PRINCIPAL
-    // ========================================
 
-    /**
-     * Charge le contenu principal du dashboard
-     */
+
     private void loadDashboardContent() {
         // Container principal
         VBox mainContainer = new VBox(20);  // ✅ Réduit de 30 à 20
@@ -94,7 +93,7 @@ public class DashboardController {
         HBox header = createMonthNavigation();
 
         // Cercle de budget
-        VBox budgetCircle = createBudgetCircle();
+        StackPane budgetCircle = createBudgetCircle();
 
         // ScrollPane pour les catégories
         ScrollPane scrollPane = new ScrollPane();
@@ -187,32 +186,114 @@ public class DashboardController {
     /**
      * Crée le cercle de budget avec budget initial, revenus et restant
      */
-    private VBox createBudgetCircle() {
-        VBox container = new VBox(5);
-        container.setAlignment(Pos.CENTER);
 
-        // ========================================
-        // ÉTAPE 1 : CRÉER TOUS LES LABELS
-        // ========================================
+    private StackPane createBudgetCircleWithProgress() {
+        StackPane container = new StackPane();
 
-        // Budget initial (en haut)
-        budgetTotalLabel = new Label("0 XOF");
-        budgetTotalLabel.setFont(Font.font("System Bold", 28));
+        // Taille du cercle
+        double size = 250;
+
+        // Canvas pour dessiner le cercle
+        Canvas canvas = new Canvas(size, size);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        // Récupérer les données
+        int userId = AuthServices.getCurrentUser().getId();
+        double budgetInitial = BudgetService.getBudgetInitial(userId);
+        double revenusMois = RevenuService.getTotalRevenusMois(userId, currentMonth);
+        double depensesTotal = DepenseService.getTotalDepensesMois(userId, currentMonth);
+        double budgetDisponible = budgetInitial + revenusMois;
+        double restant = budgetDisponible - depensesTotal;
+
+        // Récupérer les dépenses par catégorie
+        StatistiqueDAO statistiqueDAO = new StatistiqueDAO();
+        Map<String, Double> depensesParCategorie = statistiqueDAO.getDepensesParCategorie(userId);
+
+        // Dessiner le cercle de fond (gris clair)
+        gc.setLineWidth(20);
+        gc.setStroke(Color.web("#E0E0E0"));
+        gc.strokeOval(20, 20, size - 40, size - 40);
+
+        // Dessiner les segments colorés par catégorie
+        double startAngle = -90; // Commencer en haut
+
+        for (Map.Entry<String, Double> entry : depensesParCategorie.entrySet()) {
+            String categorie = entry.getKey();
+            double montant = entry.getValue();
+
+            // Calculer l'angle du segment
+            double pourcentage = (montant / depensesTotal) * 100;
+            double angle = (pourcentage / 100) * 360;
+
+            // Récupérer la couleur de la catégorie
+            String couleur = CategorieIcon.getCouleur(categorie);
+
+            // Dessiner le segment
+            gc.setStroke(Color.web(couleur));
+            gc.setLineWidth(20);
+            gc.strokeArc(20, 20, size - 40, size - 40, startAngle, angle, javafx.scene.shape.ArcType.OPEN);
+
+            startAngle += angle;
+        }
+        // Labels au centre
+        VBox labelsContainer = new VBox(5);
+        labelsContainer.setAlignment(Pos.CENTER);
+
+        budgetTotalLabel = new Label(String.format("%.0f XOF", budgetInitial));
+        budgetTotalLabel.setFont(Font.font("System Bold", 20));
         budgetTotalLabel.setStyle("-fx-cursor: hand;");
         budgetTotalLabel.setOnMouseClicked(e -> editBudgetInitial());
 
-        // Revenus du mois (au milieu, en vert)
-        revenusLabel = new Label("+ 0 XOF");
-        revenusLabel.setFont(Font.font("System", 14));
+        revenusLabel = new Label("+ " + String.format("%.0f XOF", revenusMois));
+        revenusLabel.setFont(Font.font("System", 12));
         revenusLabel.setStyle("-fx-text-fill: #4CAF50;");
 
-        // Budget restant (en bas)
+        budgetRemainingLabel = new Label(String.format("%.0f XOF", restant));
+        budgetRemainingLabel.setFont(Font.font(14));
+        budgetRemainingLabel.setStyle("-fx-text-fill: " + (restant < 0 ? "#F44336" : "#4CAF50"));
+
+        labelsContainer.getChildren().addAll(budgetTotalLabel, revenusLabel, budgetRemainingLabel);
+
+        container.getChildren().addAll(canvas, labelsContainer);
+
+        return container;
+    }
+
+    private StackPane createBudgetCircle() {
+        StackPane container = new StackPane();
+
+        // Taille du cercle
+        double size = 250;
+
+        // Canvas pour dessiner le cercle de progression
+        Canvas canvas = new Canvas(size, size);
+
+        // Container pour les labels
+        VBox labelsContainer = new VBox(5);
+        labelsContainer.setAlignment(Pos.CENTER);
+
+        // Créer les labels
+        budgetTotalLabel = new Label("0 XOF");
+        budgetTotalLabel.setFont(Font.font("System Bold", 20));
+        budgetTotalLabel.setStyle("-fx-cursor: hand;");
+        budgetTotalLabel.setOnMouseClicked(e -> editBudgetInitial());
+
+        revenusLabel = new Label("+ 0 XOF");
+        revenusLabel.setFont(Font.font("System", 12));
+        revenusLabel.setStyle("-fx-text-fill: #4CAF50;");
+
         budgetRemainingLabel = new Label("0 XOF");
+        budgetRemainingLabel.setFont(Font.font(14));
         budgetRemainingLabel.setStyle("-fx-text-fill: #666;");
-        budgetRemainingLabel.setFont(Font.font(16));
 
-        container.getChildren().addAll(budgetTotalLabel, revenusLabel, budgetRemainingLabel);
+        labelsContainer.getChildren().addAll(budgetTotalLabel, revenusLabel, budgetRemainingLabel);
 
+        // Stocker le canvas pour le mettre à jour
+        budgetCanvas = canvas;
+
+        container.getChildren().addAll(canvas, labelsContainer);
+
+        // Dessiner le cercle initial
         updateBudgetCircle();
 
         return container;
@@ -222,37 +303,33 @@ public class DashboardController {
      * Met à jour les valeurs du cercle de budget
      */
     private void updateBudgetCircle() {
-        if (budgetTotalLabel == null || budgetRemainingLabel == null) return;
+        if (budgetTotalLabel == null || budgetRemainingLabel == null || revenusLabel == null || budgetCanvas == null) {
+            return;
+        }
 
         int userId = AuthServices.getCurrentUser().getId();
 
-        // 🎯 RÉCUPÉRER LE BUDGET INITIAL (solde de départ)
+        // Récupérer les données
         double budgetInitial = BudgetService.getBudgetInitial(userId);
-
-        // 🎯 REVENUS DU MOIS
         double revenusMois = RevenuService.getTotalRevenusMois(userId, currentMonth);
-
-        // 🎯 CALCULER LE TOTAL DES DÉPENSES
         double depensesTotal = DepenseService.getTotalDepensesMois(userId, currentMonth);
-
         double budgetDisponible = budgetInitial + revenusMois;
+        double restant = budgetDisponible - depensesTotal;
 
-        // 🎯 CALCULER LE RESTANT
-        double restant = budgetDisponible- depensesTotal;
-
-        // 🎯 AFFICHAGE
+        // Mettre à jour les labels
         budgetTotalLabel.setText(String.format("%.0f XOF", budgetInitial));
-        revenusLabel.setText("+ " + String.format("%.0f XOF", revenusMois));// Label du HAUT
-        budgetRemainingLabel.setText(String.format("%.0f XOF", restant));       // Label du BAS
+        revenusLabel.setText("+ " + String.format("%.0f XOF", revenusMois));
+        budgetRemainingLabel.setText(String.format("%.0f XOF", restant));
 
-        // 🎯 COULEUR DU RESTANT
         if (restant < 0) {
-            budgetRemainingLabel.setStyle("-fx-text-fill: #F44336; -fx-font-size: 16px;"); // Rouge si négatif
+            budgetRemainingLabel.setStyle("-fx-text-fill: #F44336; -fx-font-size: 14px;");
         } else {
-            budgetRemainingLabel.setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 16px;"); // Vert si positif
+            budgetRemainingLabel.setStyle("-fx-text-fill: #4CAF50; -fx-font-size: 14px;");
         }
-    }
 
+        // 🎨 DESSINER LE CERCLE DE PROGRESSION
+        drawProgressCircle(userId, depensesTotal);
+    }
     // ========================================
     // CHARGEMENT DES CATÉGORIES
     // ========================================
@@ -1013,6 +1090,67 @@ public class DashboardController {
                 }
             }
         });
+    }
+
+    /**
+     * Dessine le cercle de progression avec les couleurs des catégories
+     */
+    private void drawProgressCircle(int userId, double depensesTotal) {
+        GraphicsContext gc = budgetCanvas.getGraphicsContext2D();
+        double size = budgetCanvas.getWidth();
+        double centerX = size / 2;
+        double centerY = size / 2;
+        double radius = (size - 60) / 2;  // Rayon du cercle
+        double lineWidth = 15;  // Épaisseur du cercle
+
+        // Effacer le canvas
+        gc.clearRect(0, 0, size, size);
+
+        // Dessiner le cercle de fond (gris clair)
+        gc.setLineWidth(lineWidth);
+        gc.setStroke(Color.web("#E0E0E0"));
+        gc.setLineCap(javafx.scene.shape.StrokeLineCap.ROUND);
+        gc.strokeOval(centerX - radius, centerY - radius, radius * 2, radius * 2);
+
+        // Si pas de dépenses, arrêter ici
+        if (depensesTotal == 0) {
+            return;
+        }
+
+        // Récupérer les dépenses par catégorie
+        StatistiqueDAO statistiqueDAO = new StatistiqueDAO();
+        Map<String, Double> depensesParCategorie = statistiqueDAO.getDepensesParCategorie(userId);
+
+        // Dessiner les segments colorés
+        double startAngle = -90;  // Commencer en haut (12h)
+
+        for (Map.Entry<String, Double> entry : depensesParCategorie.entrySet()) {
+            String categorie = entry.getKey();
+            double montant = entry.getValue();
+
+            // Calculer l'angle du segment (en degrés)
+            double pourcentage = (montant / depensesTotal);
+            double angle = pourcentage * 360;
+
+            // Récupérer la couleur de la catégorie
+            String couleurHex = CategorieIcon.getCouleur(categorie);
+            Color couleur = Color.web(couleurHex);
+
+            // Dessiner l'arc
+            gc.setStroke(couleur);
+            gc.setLineWidth(lineWidth);
+            gc.strokeArc(
+                    centerX - radius,
+                    centerY - radius,
+                    radius * 2,
+                    radius * 2,
+                    startAngle,
+                    angle,
+                    javafx.scene.shape.ArcType.OPEN
+            );
+
+            startAngle += angle;
+        }
     }
 
 

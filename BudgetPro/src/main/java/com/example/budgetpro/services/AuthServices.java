@@ -290,13 +290,56 @@ public class AuthServices {
         }
     }
 
+
+    public static boolean resetPassword(String email, String newPassword) {
+        if (email == null || email.trim().isEmpty()) return false;
+        if (newPassword == null || newPassword.length() < 6) return false;
+
+        email = email.trim().toLowerCase();
+
+        try {
+            Connection conn = Database.getConnection();
+
+            // Vérifier que l'email existe
+            String checkSql = "SELECT id_utilisateur FROM utilisateur WHERE email = ?";
+            PreparedStatement checkStmt = conn.prepareStatement(checkSql);
+            checkStmt.setString(1, email);
+            ResultSet rs = checkStmt.executeQuery();
+
+            if (!rs.next()) {
+                System.out.println("❌ Aucun compte avec cet email : " + email);
+                return false;
+            }
+
+            // Mettre à jour le mot de passe
+            String updateSql = "UPDATE utilisateur SET password = ? WHERE email = ?";
+            PreparedStatement updateStmt = conn.prepareStatement(updateSql);
+            updateStmt.setString(1, newPassword); // ⚠️ En production : hasher avec BCrypt !
+            updateStmt.setString(2, email);
+
+            int rows = updateStmt.executeUpdate();
+
+            if (rows > 0) {
+                System.out.println("✅ Mot de passe réinitialisé pour : " + email);
+                return true;
+            } else {
+                System.out.println("❌ Échec de la mise à jour");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("❌ Erreur SQL resetPassword : " + e.getMessage());
+            return false;
+        }
+    }
     public static User getCurrentUser() {
         return currentUser;
     }
     public static boolean isLoggedIn() {return currentUser != null;}
-    
     public static void logout() {
         currentUser = null;
         System.out.println("Session fermée.");
     }
+
+
 }

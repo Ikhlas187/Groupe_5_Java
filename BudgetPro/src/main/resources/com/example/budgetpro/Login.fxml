@@ -46,7 +46,7 @@
         <Button fx:id="connexionButton" text="Se connecter" styleClass="btn-primary" onMouseClicked="#handleLogin" />
 
         <!-- MOT DE PASSE OUBLIE -->
-        <Label text="Mot de passe oublié ?" styleClass="forgot-label" />
+        <Label text="Mot de passe oublié ?" styleClass="forgot-label" onMouseClicked="#versForgotPage"/>
 
         <Region prefHeight="6" />
 

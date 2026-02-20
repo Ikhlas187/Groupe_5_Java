@@ -80,4 +80,8 @@ public class Login {
     private void versInscriptionPage (MouseEvent event){
         SceneSwitcher.switchScene("/com/example/budgetpro/Register.fxml",(Node) event.getSource());
     }
+    @FXML
+    private void versForgotPage (MouseEvent event){
+        SceneSwitcher.switchScene("/com/example/budgetpro/ForgotPassword.fxml",(Node) event.getSource());
+    }
 }
