@@ -10,180 +10,108 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.budgetpro.pages.Settings"
             prefHeight="700.0" prefWidth="900.0"
-            style="-fx-background-color: #f0f2ff;">
+            styleClass="page-root">
 
-    <!-- EN-TETE avec dégradé violet comme la sidebar -->
+    <!-- EN-TETE -->
     <top>
-        <VBox style="-fx-background-color: linear-gradient(to right, #667eea, #764ba2); -fx-padding: 20 30;">
-            <Label text="Mon Profil"
-                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;" />
-            <Label text="Gérez vos informations et préférences"
-                   style="-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.8);" />
+        <VBox styleClass="settings-header">
+            <Label text="Mon Profil" styleClass="settings-header-title"/>
+            <Label text="Gérez vos informations et préférences" styleClass="settings-header-subtitle"/>
         </VBox>
     </top>
 
     <!-- CONTENU -->
     <center>
-        <ScrollPane fitToWidth="true"
-                    style="-fx-background: transparent; -fx-background-color: transparent;">
-            <VBox spacing="20" style="-fx-padding: 25;">
+        <ScrollPane fitToWidth="true" styleClass="settings-scroll">
+            <VBox spacing="20" styleClass="settings-content">
 
                 <!-- LIGNE 1 : Carte profil + Stats -->
                 <HBox spacing="20">
 
                     <!-- CARTE PROFIL -->
-                    <VBox spacing="20"
-                          style="-fx-background-color: white; -fx-padding: 25; -fx-background-radius: 16; -fx-effect: dropshadow(gaussian, rgba(102,126,234,0.15), 10, 0, 0, 4);"
-                          HBox.hgrow="ALWAYS">
+                    <VBox spacing="20" styleClass="card" HBox.hgrow="ALWAYS">
 
                         <HBox spacing="20" alignment="CENTER_LEFT">
-                            <!-- Avatar cercle violet -->
+                            <!-- Avatar -->
                             <StackPane>
-                                <Circle radius="50"
-                                        style="-fx-fill: linear-gradient(to bottom right, #667eea, #764ba2);" />
-                                <Label fx:id="avatarLabel" text="AD"
-                                       style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: white;" />
+                                <Circle radius="50" styleClass="avatar-circle"/>
+                                <Label fx:id="avatarLabel" text="AD" styleClass="avatar-label"/>
                             </StackPane>
 
                             <!-- Infos utilisateur -->
                             <VBox spacing="5" HBox.hgrow="ALWAYS">
-                                <Label fx:id="nomLabel" text="..."
-                                       style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;" />
-                                <Label fx:id="emailLabel" text="..."
-                                       style="-fx-font-size: 13px; -fx-text-fill: #888;" />
-                                <Label fx:id="telephoneLabel" text="..."
-                                       style="-fx-font-size: 13px; -fx-text-fill: #888;" />
-                                <Label fx:id="ageLabel" text="..."
-                                       style="-fx-font-size: 13px; -fx-text-fill: #888;" />
+                                <Label fx:id="nomLabel" text="..." styleClass="profile-name"/>
+                                <Label fx:id="emailLabel" text="..." styleClass="profile-info"/>
+                                <Label fx:id="telephoneLabel" text="..." styleClass="profile-info"/>
+                                <Label fx:id="ageLabel" text="..." styleClass="profile-info"/>
                             </VBox>
                         </HBox>
 
-                        <!-- Bouton éditer -->
                         <Button text="Editer le Profil"
                                 onAction="#handleModifierProfil"
                                 maxWidth="Infinity"
-                                style="-fx-background-color: linear-gradient(to right, #667eea, #764ba2);
-                                       -fx-text-fill: white;
-                                       -fx-font-size: 13px;
-                                       -fx-font-weight: bold;
-                                       -fx-background-radius: 10;
-                                       -fx-cursor: hand;
-                                       -fx-padding: 10 20;" />
+                                styleClass="btn-primary"/>
                     </VBox>
 
-                    <!-- STATS (3 cartes empilées) -->
+                    <!-- STATS -->
                     <VBox spacing="12" prefWidth="220">
 
-                        <!-- Solde -->
-                        <VBox spacing="4"
-                              style="-fx-background-color: white; -fx-padding: 15 20; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(102,126,234,0.12), 8, 0, 0, 3);">
-                            <Label text="Solde Actuel"
-                                   style="-fx-font-size: 11px; -fx-text-fill: #888;" />
-                            <Label fx:id="soldeLabel" text="0 XOF"
-                                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #667eea;" />
+                        <VBox spacing="4" styleClass="stat-mini-card">
+                            <Label text="Solde Actuel" styleClass="stat-mini-label"/>
+                            <Label fx:id="soldeLabel" text="0 XOF" styleClass="stat-mini-value-purple"/>
                         </VBox>
 
-                        <!-- Dépenses -->
-                        <VBox spacing="4"
-                              style="-fx-background-color: white; -fx-padding: 15 20; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(102,126,234,0.12), 8, 0, 0, 3);">
-                            <Label text="Dépenses ce mois"
-                                   style="-fx-font-size: 11px; -fx-text-fill: #888;" />
-                            <Label fx:id="depensesLabel" text="0 XOF"
-                                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;" />
+                        <VBox spacing="4" styleClass="stat-mini-card">
+                            <Label text="Dépenses ce mois" styleClass="stat-mini-label"/>
+                            <Label fx:id="depensesLabel" text="0 XOF" styleClass="stat-mini-value-red"/>
                         </VBox>
 
-                        <!-- Revenus -->
-                        <VBox spacing="4"
-                              style="-fx-background-color: white; -fx-padding: 15 20; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(102,126,234,0.12), 8, 0, 0, 3);">
-                            <Label text="Revenus ce mois"
-                                   style="-fx-font-size: 11px; -fx-text-fill: #888;" />
-                            <Label fx:id="revenusLabel" text="0 XOF"
-                                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #27ae60;" />
+                        <VBox spacing="4" styleClass="stat-mini-card">
+                            <Label text="Revenus ce mois" styleClass="stat-mini-label"/>
+                            <Label fx:id="revenusLabel" text="0 XOF" styleClass="stat-mini-value-green"/>
                         </VBox>
 
                     </VBox>
                 </HBox>
 
                 <!-- SECTION PREFERENCES -->
-                <VBox spacing="0"
-                      style="-fx-background-color: white; -fx-background-radius: 16; -fx-effect: dropshadow(gaussian, rgba(102,126,234,0.12), 8, 0, 0, 3);">
+                <VBox spacing="0" styleClass="card">
 
-                    <Label text="Préférences"
-                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e; -fx-padding: 18 20 10 20;" />
+                    <Label text="Préférences" styleClass="section-title"/>
 
-                    <!-- Mode sombre -->
-                    <HBox alignment="CENTER_LEFT"
-                          style="-fx-padding: 12 20; -fx-border-color: #f0f0f0; -fx-border-width: 1 0 0 0;">
-                        <Label text="Mode Sombre" HBox.hgrow="ALWAYS"
-                               style="-fx-font-size: 13px; -fx-text-fill: #333;" />
-                        <CheckBox fx:id="darkModeToggle" onAction="#handleDarkModeToggle"
-                                  style="-fx-cursor: hand;" />
+                    <HBox alignment="CENTER_LEFT" styleClass="pref-row">
+                        <Label text="Mode Sombre" HBox.hgrow="ALWAYS" styleClass="pref-label"/>
+                        <CheckBox fx:id="darkModeToggle" onAction="#handleDarkModeToggle"/>
                     </HBox>
-
-                    <!-- Notifications 
-                    <HBox alignment="CENTER_LEFT"
-                          style="-fx-padding: 12 20; -fx-border-color: #f0f0f0; -fx-border-width: 1 0 0 0;">
-                        <Label text="Notifications" HBox.hgrow="ALWAYS"
-                               style="-fx-font-size: 13px; -fx-text-fill: #333;" />
-                        <CheckBox fx:id="notificationsToggle" selected="true"
-                                  style="-fx-cursor: hand;" />
-                    </HBox>-->
 
                 </VBox>
 
                 <!-- SECTION ACTIONS -->
-                <VBox spacing="12"
-                      style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 16; -fx-effect: dropshadow(gaussian, rgba(102,126,234,0.12), 8, 0, 0, 3);">
+                <VBox spacing="12" styleClass="card">
 
-                    <Label text="Actions"
-                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;" />
+                    <Label text="Actions" styleClass="section-title"/>
 
-                    <!-- Ligne 1 : Changer mdp + Exporter -->
                     <HBox spacing="12">
                         <Button text="Changer le Mot de Passe"
                                 onAction="#handleChangerMotDePasse"
                                 HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                                style="-fx-background-color: linear-gradient(to right, #667eea, #764ba2);
-                                       -fx-text-fill: white;
-                                       -fx-font-size: 13px;
-                                       -fx-font-weight: bold;
-                                       -fx-background-radius: 10;
-                                       -fx-cursor: hand;
-                                       -fx-padding: 10 15;" />
+                                styleClass="btn-primary"/>
                         <Button text="Exporter les Données"
                                 onAction="#handleExporter"
                                 HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                                style="-fx-background-color: linear-gradient(to right, #667eea, #764ba2);
-                                       -fx-text-fill: white;
-                                       -fx-font-size: 13px;
-                                       -fx-font-weight: bold;
-                                       -fx-background-radius: 10;
-                                       -fx-cursor: hand;
-                                       -fx-padding: 10 15;" />
+                                styleClass="btn-primary"/>
                     </HBox>
 
-                    <!-- Ligne 2 : Se déconnecter -->
                     <Button text="Se Déconnecter"
                             onAction="#handleDeconnexion"
                             maxWidth="Infinity"
-                            style="-fx-background-color: #f59e0b;
-                                   -fx-text-fill: white;
-                                   -fx-font-size: 13px;
-                                   -fx-font-weight: bold;
-                                   -fx-background-radius: 10;
-                                   -fx-cursor: hand;
-                                   -fx-padding: 10 15;" />
+                            styleClass="btn-warning"/>
 
-                    <!-- Supprimer le compte -->
                     <Label text="Supprimer le compte"
                            onMouseClicked="#handleSupprimerCompte"
-                           style="-fx-text-fill: #e74c3c;
-                                  -fx-font-size: 12px;
-                                  -fx-underline: true;
-                                  -fx-cursor: hand;
-                                  -fx-alignment: center;"
+                           styleClass="link-danger"
                            maxWidth="Infinity"
-                           alignment="CENTER" />
+                           alignment="CENTER"/>
                 </VBox>
 
             </VBox>

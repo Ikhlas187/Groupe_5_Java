@@ -16,7 +16,7 @@ public class ThemeManager {
     private static final String THEME_PREF_KEY = "theme";
     private static final String LIGHT_THEME = "/com/example/budgetpro/styles/light.css";
     private static final String DARK_THEME = "/com/example/budgetpro/styles/dark.css";
-    
+    private static final String DASHBOARD_CSS = "/com/example/budgetpro/styles/dashboard.css"; // toujours chargé
     private static Scene currentScene;
     private static boolean isDarkMode = false;
     
@@ -68,6 +68,9 @@ public class ThemeManager {
         String themeUrl = ThemeManager.class.getResource(themeFile).toExternalForm();
         
         currentScene.getStylesheets().add(themeUrl);
+        
+        // Dashboard CSS chargé en permanence, indépendant du thème
+        currentScene.getStylesheets().add(ThemeManager.class.getResource(DASHBOARD_CSS).toExternalForm());
         
         System.out.println(isDarkMode ? "🌙 Mode sombre activé" : "☀️ Mode clair activé");
     }

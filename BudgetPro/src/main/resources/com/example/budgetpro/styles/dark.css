@@ -13,6 +13,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-background-color: #1a202c;
 }
 
+/* ===== PAGE ROOT ===== */
+.page-root {
+    -fx-background-color: #1a202c;
+}
+
 /* ===== TEXTE ===== */
 .title-large {
     -fx-font-size: 32px;
@@ -23,7 +28,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .title-medium {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-text-fill: #e2e8f0;
+    -fx-text-fill: white;
 }
 
 .title-small {
@@ -51,6 +56,32 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-text-fill: #e2e8f0;
 }
 
+/* ===== FILTRE BAR ===== */
+.filter-bar {
+    -fx-background-color: #252d3d;
+    -fx-padding: 12 20;
+    -fx-border-color: #4a5568;
+    -fx-border-width: 0 0 1 0;
+}
+
+.filter-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #cbd5e0;
+    -fx-font-weight: bold;
+}
+
+/* ===== PAGE HEADER (titre seul) ===== */
+.page-header {
+    -fx-background-color: linear-gradient(to right, #4c1d95, #6b21a8);
+    -fx-padding: 18 30;
+}
+
+.page-header-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
 /* ===== CONTENEURS ===== */
 .container-white {
     -fx-background-color: #2d3748;
@@ -60,8 +91,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 
 .header-bar {
+    -fx-background-color: linear-gradient(to right, #4c1d95, #6b21a8);
+    -fx-padding: 25 30;
+}
+
+.footer-bar {
     -fx-background-color: #2d3748;
     -fx-padding: 20;
+}
+
+.content-area {
+    -fx-background-color: #1a202c;
+    -fx-padding: 20;
+}
+
+/* ===== TOTAL LABEL ===== */
+.total-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e2e8f0;
 }
 
 /* ===== CARTES STATISTIQUES ===== */
@@ -101,6 +149,37 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-text-fill: #4ade80;
 }
 
+/* ===== MINI STATS (Settings) ===== */
+.stat-mini-card {
+    -fx-background-color: #2d3748;
+    -fx-padding: 15 20;
+    -fx-background-radius: 14;
+    -fx-effect: dropshadow(gaussian, #00000060, 8, 0, 0, 3);
+}
+
+.stat-mini-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #a0aec0;
+}
+
+.stat-mini-value-purple {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #a78bfa;
+}
+
+.stat-mini-value-red {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f87171;
+}
+
+.stat-mini-value-green {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4ade80;
+}
+
 /* ===== CHAMPS DE TEXTE ===== */
 .input-field {
     -fx-background-color: #2d3748;
@@ -132,10 +211,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .btn-primary {
     -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #a78bfa 0%, #c084fc 100%);
     -fx-text-fill: white;
-    -fx-font-size: 16px;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
-    -fx-padding: 14 24;
+    -fx-padding: 10 20;
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, #a78bfa66, 10, 0, 0, 5);
 }
@@ -149,7 +228,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
-    -fx-padding: 12 24;
+    -fx-padding: 10 20;
     -fx-cursor: hand;
 }
 
@@ -157,21 +236,30 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-background-color: #4b5563;
 }
 
+.btn-success {
+    -fx-background-color: #16a34a;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+
+.btn-success:hover {
+    -fx-background-color: #15803d;
+}
+
 .btn-warning {
     -fx-background-color: #f59e0b;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
-    -fx-padding: 12 24;
+    -fx-padding: 10 20;
     -fx-cursor: hand;
 }
 
 .btn-warning:hover {
     -fx-background-color: #d97706;
-}
-
-.button {
-    -fx-text-fill: white;
 }
 
 /* ===== LIENS ===== */
@@ -193,12 +281,26 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 /* ===== TABLEVIEW ===== */
 .table-view {
     -fx-background-color: #2d3748;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #1a202c;
 }
 
 .table-view .column-header {
-    -fx-background-color: #1a202c;
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header .label {
     -fx-text-fill: #e2e8f0;
     -fx-font-weight: bold;
+}
+
+.table-view .table-cell {
+    -fx-text-fill: #e2e8f0;
+    -fx-border-color: #4a5568;
+    -fx-border-width: 0 0 1 0;
 }
 
 .table-row-cell {
@@ -210,36 +312,153 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-background-color: #374151;
 }
 
+.table-row-cell:empty {
+    -fx-background-color: #2d3748;
+}
+
 .table-row-cell:selected {
     -fx-background-color: #4c1d95;
 }
 
-/* ===== GRAPHIQUES ===== */
-.chart {
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: #e2e8f0;
+}
+
+.table-view .corner {
+    -fx-background-color: #1a202c;
+}
+
+.table-view .placeholder {
     -fx-background-color: #2d3748;
 }
 
+.table-view .placeholder .label {
+    -fx-text-fill: #a0aec0;
+}
+
+/* ===== GRAPHIQUES ===== */
+.chart, .chart-card-scroll, .charts-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.charts-content {
+    -fx-padding: 20;
+}
+
+.chart-card {
+    -fx-background-color: #2d3748;
+    -fx-padding: 15;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, #00000080, 8, 0, 0, 2);
+}
+
+/* ---- Conteneur principal du chart ---- */
+.chart {
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+}
+
+.chart-content {
+    -fx-background-color: transparent;
+}
+
+.chart-plot-background {
+    -fx-background-color: #1e2738;
+}
+
+/* ---- Titre du chart ---- */
 .chart-title {
     -fx-text-fill: #e2e8f0;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* ---- Axes ---- */
+.axis {
+    -fx-tick-label-fill: #a0aec0;
+    -fx-minor-tick-visible: false;
 }
 
 .axis-label {
     -fx-text-fill: #a0aec0;
+    -fx-font-size: 12px;
 }
 
-.chart-plot-background {
-    -fx-background-color: #1a202c;
+.axis:top .axis-minor-tick-mark,
+.axis:bottom .axis-minor-tick-mark,
+.axis:left .axis-minor-tick-mark,
+.axis:right .axis-minor-tick-mark {
+    -fx-stroke: transparent;
 }
 
-.chart-content {
-    -fx-background-color: #2d3748;
+.axis:top .axis-tick-mark,
+.axis:bottom .axis-tick-mark,
+.axis:left .axis-tick-mark,
+.axis:right .axis-tick-mark {
+    -fx-stroke: #4a5568;
+}
+
+/* ---- Lignes de grille ---- */
+.chart-horizontal-grid-lines {
+    -fx-stroke: #3a4660;
+    -fx-stroke-width: 1;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: #3a4660;
+    -fx-stroke-width: 1;
+}
+
+.chart-horizontal-zero-line {
+    -fx-stroke: #718096;
+}
+
+.chart-vertical-zero-line {
+    -fx-stroke: #718096;
+}
+
+/* ---- Légende ---- */
+.chart-legend {
+    -fx-background-color: transparent;
+}
+
+.chart-legend-item {
+    -fx-text-fill: #cbd5e0;
+    -fx-font-size: 12px;
+}
+
+/* ---- PieChart — labels des portions ---- */
+.chart-pie-label {
+    -fx-fill: #e2e8f0;
+    -fx-font-size: 12px;
+}
+
+.chart-pie-label-line {
+    -fx-stroke: #a0aec0;
+}
+
+/* ---- LineChart — ligne ---- */
+.chart-series-line {
+    -fx-stroke-width: 2.5;
+}
+
+.chart-line-symbol {
+    -fx-background-radius: 5px;
+    -fx-padding: 4px;
+}
+
+/* ---- BarChart — barres ---- */
+.chart-bar {
+    -fx-bar-fill: #a78bfa;
+    -fx-background-radius: 3 3 0 0;
 }
 
 /* ===== COMBOBOX ===== */
 .combo-box {
     -fx-background-color: #2d3748;
     -fx-border-color: #4a5568;
-    -fx-border-radius: 10;
+    -fx-border-radius: 5;
 }
 
 .combo-box:focused {
@@ -249,6 +468,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .combo-box .list-cell {
     -fx-background-color: #2d3748;
     -fx-text-fill: #e2e8f0;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #2d3748;
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: #2d3748;
+    -fx-text-fill: #e2e8f0;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: #374151;
 }
 
 /* ===== SEPARATOR ===== */
@@ -263,4 +495,270 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 .scroll-bar .thumb {
     -fx-background-color: #4a5568;
+    -fx-background-radius: 5;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom, #2d3748, #1a202c);
+}
+
+.sidebar-title {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.sidebar-btn {
+    -fx-background-color: #374151;
+    -fx-text-fill: #e2e8f0;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 15 20;
+    -fx-cursor: hand;
+}
+
+.sidebar-btn:hover {
+    -fx-background-color: #4b5563;
+}
+
+.sidebar-btn-active {
+    -fx-background-color: #4c1d95;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 15 20;
+    -fx-cursor: hand;
+}
+
+.sidebar-profile {
+    -fx-background-color: rgba(255,255,255,0.1);
+    -fx-background-radius: 15;
+    -fx-padding: 15;
+}
+
+.sidebar-avatar {
+    -fx-fill: #a78bfa;
+}
+
+.sidebar-username {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.sidebar-logout {
+    -fx-text-fill: #a0aec0;
+    -fx-font-size: 12px;
+}
+
+/* ===== SETTINGS ===== */
+.settings-header {
+    -fx-background-color: linear-gradient(to right, #4c1d95, #6b21a8);
+    -fx-padding: 20 30;
+}
+
+.settings-header-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.settings-header-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255,255,255,0.7);
+}
+
+.settings-scroll {
+    -fx-background-color: transparent;
+    -fx-background: #1a202c;
+}
+
+.settings-content {
+    -fx-padding: 25;
+}
+
+.card {
+    -fx-background-color: #2d3748;
+    -fx-padding: 20 25;
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(gaussian, #00000080, 10, 0, 0, 4);
+}
+
+.avatar-circle {
+    -fx-fill: linear-gradient(to bottom right, #a78bfa, #c084fc);
+}
+
+.avatar-label {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.profile-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e2e8f0;
+}
+
+.profile-info {
+    -fx-font-size: 13px;
+    -fx-text-fill: #a0aec0;
+}
+
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e2e8f0;
+    -fx-padding: 0 0 10 0;
+}
+
+.pref-row {
+    -fx-padding: 12 0;
+    -fx-border-color: #4a5568;
+    -fx-border-width: 1 0 0 0;
+}
+
+.pref-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #e2e8f0;
+}
+
+/* ===== DASHBOARD — BOUTONS MENU ===== */
+.menu-btn {
+    -fx-background-color: #374151;
+    -fx-text-fill: #e2e8f0;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 15 20;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.menu-btn:hover {
+    -fx-background-color: #4b5563;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 5, 0, 0, 2);
+}
+
+.menu-btn.active-menu {
+    -fx-background-color: #4c1d95;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0, 0, 3);
+}
+
+/* ===== DASHBOARD — CONTENU PRINCIPAL ===== */
+.main-content {
+    -fx-background-color: #1a202c;
+}
+
+.month-title {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.month-nav-btn {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 10;
+}
+
+.month-nav-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 50%;
+}
+
+/* ===== DASHBOARD — BUDGET ===== */
+.budget-total {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+.budget-remaining {
+    -fx-text-fill: #a0aec0;
+    -fx-font-size: 16px;
+}
+
+/* ===== DASHBOARD — CARTES CATÉGORIES ===== */
+.category-card {
+    -fx-background-color: #2d3748;
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 2);
+}
+
+.category-title {
+    -fx-text-fill: #a78bfa;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.subcategory-name {
+    -fx-text-fill: #cbd5e0;
+    -fx-font-size: 14px;
+}
+
+.subcategory-amount {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.add-btn {
+    -fx-background-color: #4a5568;
+    -fx-background-radius: 50%;
+    -fx-cursor: hand;
+    -fx-min-width: 30;
+    -fx-min-height: 30;
+    -fx-max-width: 30;
+    -fx-max-height: 30;
+}
+
+.add-btn:hover {
+    -fx-background-color: #718096;
+}
+
+.categories-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.categories-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.categories-scroll .scroll-bar {
+    -fx-background-color: transparent;
+}
+
+/* ===== DASHBOARD — PROFIL SIDEBAR ===== */
+.user-profile {
+    -fx-background-color: rgba(255,255,255,0.1);
+    -fx-background-radius: 15;
+    -fx-padding: 15;
+}
+
+.username {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.logout-link {
+    -fx-text-fill: #a0aec0;
+    -fx-font-size: 12px;
 }

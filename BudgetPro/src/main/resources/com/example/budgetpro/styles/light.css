@@ -7,10 +7,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     Author     : asteras
 */
 
-/* ========== THÈME CLAIR ========== */
+/* ========== THÈME CLAIR — PALETTE DOUCE ========== */
 
 .root {
-    -fx-background-color: #f7fafc;
+    -fx-background-color: #e8ecf4;
+}
+
+/* ===== PAGE ROOT ===== */
+.page-root {
+    -fx-background-color: #e8ecf4;
 }
 
 /* ===== TEXTE ===== */
@@ -23,7 +28,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .title-medium {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2d3748;
+    -fx-text-fill: white;
 }
 
 .title-small {
@@ -47,17 +52,64 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-text-fill: #718096;
 }
 
+.label {
+    -fx-text-fill: #2d3748;
+}
+
+/* ===== PAGE HEADER (titre seul) ===== */
+.page-header {
+    -fx-background-color: linear-gradient(to right, #667eea, #764ba2);
+    -fx-padding: 18 30;
+}
+
+.page-header-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* ===== FILTRE BAR ===== */
+.filter-bar {
+    -fx-background-color: #edf0f7;
+    -fx-padding: 12 20;
+    -fx-border-color: #d0d5e8;
+    -fx-border-width: 0 0 1 0;
+}
+
+.filter-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #4a5568;
+    -fx-font-weight: bold;
+}
+
 /* ===== CONTENEURS ===== */
 .container-white {
-    -fx-background-color: white;
+    -fx-background-color: #f0f3fa;
     -fx-background-radius: 15;
     -fx-padding: 30;
-    -fx-effect: dropshadow(gaussian, #0000001a, 10, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, #b0bcd440, 10, 0, 0, 2);
 }
 
 .header-bar {
-    -fx-background-color: white;
+    -fx-background-color: linear-gradient(to right, #667eea, #764ba2);
+    -fx-padding: 25 30;
+}
+
+.footer-bar {
+    -fx-background-color: #edf0f7;
     -fx-padding: 20;
+}
+
+.content-area {
+    -fx-background-color: #e8ecf4;
+    -fx-padding: 20;
+}
+
+/* ===== TOTAL LABEL ===== */
+.total-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2d3748;
 }
 
 /* ===== CARTES STATISTIQUES ===== */
@@ -97,6 +149,37 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-text-fill: #38a169;
 }
 
+/* ===== MINI STATS (Settings) ===== */
+.stat-mini-card {
+    -fx-background-color: #f0f3fa;
+    -fx-padding: 15 20;
+    -fx-background-radius: 14;
+    -fx-effect: dropshadow(gaussian, #667eea1f, 8, 0, 0, 3);
+}
+
+.stat-mini-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #888;
+}
+
+.stat-mini-value-purple {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #667eea;
+}
+
+.stat-mini-value-red {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e74c3c;
+}
+
+.stat-mini-value-green {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #27ae60;
+}
+
 /* ===== CHAMPS DE TEXTE ===== */
 .input-field {
     -fx-background-color: #f7fafc;
@@ -114,14 +197,24 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-background-color: white;
 }
 
+.text-field, .password-field, .text-area {
+    -fx-background-color: white;
+    -fx-text-fill: #2d3748;
+    -fx-border-color: #e2e8f0;
+}
+
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #667eea;
+}
+
 /* ===== BOUTONS ===== */
 .btn-primary {
     -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #667eea 0%, #764ba2 100%);
     -fx-text-fill: white;
-    -fx-font-size: 16px;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
-    -fx-padding: 14 24;
+    -fx-padding: 10 20;
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, #667eea66, 10, 0, 0, 5);
 }
@@ -131,16 +224,29 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 
 .btn-secondary {
-    -fx-background-color: #4a5568;
+    -fx-background-color: #757575;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
-    -fx-padding: 12 24;
+    -fx-padding: 10 20;
     -fx-cursor: hand;
 }
 
 .btn-secondary:hover {
-    -fx-background-color: #2d3748;
+    -fx-background-color: #616161;
+}
+
+.btn-success {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+
+.btn-success:hover {
+    -fx-background-color: #43A047;
 }
 
 .btn-warning {
@@ -148,7 +254,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
-    -fx-padding: 12 24;
+    -fx-padding: 10 20;
     -fx-cursor: hand;
 }
 
@@ -174,57 +280,478 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 
 /* ===== TABLEVIEW ===== */
 .table-view {
-    -fx-background-color: white;
+    -fx-background-color: #f0f3fa;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #2d3748;
 }
 
 .table-view .column-header {
-    -fx-background-color: #f7fafc;
-    -fx-text-fill: #2d3748;
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
     -fx-font-weight: bold;
 }
 
+.table-view .table-cell {
+    -fx-text-fill: #2d3748;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1 0;
+}
+
 .table-row-cell {
-    -fx-background-color: white;
+    -fx-background-color: #f0f3fa;
     -fx-text-fill: #2d3748;
 }
 
 .table-row-cell:odd {
-    -fx-background-color: #f7fafc;
+    -fx-background-color: #e4e9f5;
+}
+
+.table-row-cell:empty {
+    -fx-background-color: #f0f3fa;
 }
 
 .table-row-cell:selected {
     -fx-background-color: #e6e6fa;
 }
 
-/* ===== GRAPHIQUES ===== */
-.chart {
-    -fx-background-color: white;
-}
-
-.chart-title {
+.table-row-cell:selected .table-cell {
     -fx-text-fill: #2d3748;
 }
 
-.axis-label {
+.table-view .corner {
+    -fx-background-color: #2d3748;
+}
+
+.table-view .placeholder {
+    -fx-background-color: #f0f3fa;
+}
+
+.table-view .placeholder .label {
     -fx-text-fill: #718096;
 }
 
-.chart-plot-background {
+/* ===== GRAPHIQUES ===== */
+.chart, .chart-card-scroll, .charts-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.charts-content {
+    -fx-padding: 20;
+}
+
+.chart-card {
     -fx-background-color: white;
+    -fx-padding: 15;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, #00000018, 8, 0, 0, 2);
+}
+
+/* ---- Conteneur principal du chart ---- */
+.chart {
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+}
+
+.chart-content {
+    -fx-background-color: transparent;
+}
+
+.chart-plot-background {
+    -fx-background-color: #f8f9ff;
+}
+
+/* ---- Titre du chart ---- */
+.chart-title {
+    -fx-text-fill: #2d3748;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* ---- Axes ---- */
+.axis {
+    -fx-tick-label-fill: #4a5568;
+    -fx-minor-tick-visible: false;
+}
+
+.axis-label {
+    -fx-text-fill: #4a5568;
+    -fx-font-size: 12px;
+}
+
+.axis:top .axis-tick-mark,
+.axis:bottom .axis-tick-mark,
+.axis:left .axis-tick-mark,
+.axis:right .axis-tick-mark {
+    -fx-stroke: #cbd5e0;
+}
+
+/* ---- Lignes de grille ---- */
+.chart-horizontal-grid-lines {
+    -fx-stroke: #e2e8f0;
+    -fx-stroke-width: 1;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: #e2e8f0;
+    -fx-stroke-width: 1;
+}
+
+.chart-horizontal-zero-line {
+    -fx-stroke: #a0aec0;
+}
+
+.chart-vertical-zero-line {
+    -fx-stroke: #a0aec0;
+}
+
+/* ---- Légende ---- */
+.chart-legend {
+    -fx-background-color: transparent;
+}
+
+.chart-legend-item {
+    -fx-text-fill: #4a5568;
+    -fx-font-size: 12px;
+}
+
+/* ---- PieChart — labels des portions ---- */
+.chart-pie-label {
+    -fx-fill: #2d3748;
+    -fx-font-size: 12px;
+}
+
+.chart-pie-label-line {
+    -fx-stroke: #718096;
+}
+
+/* ---- LineChart — ligne ---- */
+.chart-series-line {
+    -fx-stroke-width: 2.5;
+}
+
+.chart-line-symbol {
+    -fx-background-radius: 5px;
+    -fx-padding: 4px;
+}
+
+/* ---- BarChart — barres ---- */
+.chart-bar {
+    -fx-background-radius: 3 3 0 0;
 }
 
 /* ===== COMBOBOX ===== */
 .combo-box {
-    -fx-background-color: #f7fafc;
+    -fx-background-color: white;
     -fx-border-color: #e2e8f0;
-    -fx-border-radius: 10;
+    -fx-border-radius: 5;
 }
 
 .combo-box:focused {
     -fx-border-color: #667eea;
 }
 
+.combo-box .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill: #2d3748;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: white;
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill: #2d3748;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: #f7fafc;
+}
+
 /* ===== SEPARATOR ===== */
 .separator .line {
     -fx-background-color: #e2e8f0;
+}
+
+/* ===== SCROLLBAR ===== */
+.scroll-bar {
+    -fx-background-color: #f7fafc;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #cbd5e0;
+    -fx-background-radius: 5;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom, #7B8CDE, #A8B5F0);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 2, 2);
+}
+
+.sidebar-title {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.sidebar-btn {
+    -fx-background-color: #FFB84D;
+    -fx-text-fill: #333;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 15 20;
+    -fx-cursor: hand;
+}
+
+.sidebar-btn:hover {
+    -fx-background-color: #FFA726;
+}
+
+.sidebar-btn-active {
+    -fx-background-color: #FF9800;
+    -fx-text-fill: #333;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 15 20;
+    -fx-cursor: hand;
+}
+
+.sidebar-profile {
+    -fx-background-color: rgba(255,255,255,0.2);
+    -fx-background-radius: 15;
+    -fx-padding: 15;
+}
+
+.sidebar-avatar {
+    -fx-fill: #FFB84D;
+}
+
+.sidebar-username {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.sidebar-logout {
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+}
+
+/* ===== SETTINGS ===== */
+.settings-header {
+    -fx-background-color: linear-gradient(to right, #667eea, #764ba2);
+    -fx-padding: 20 30;
+}
+
+.settings-header-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.settings-header-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255,255,255,0.8);
+}
+
+.settings-scroll {
+    -fx-background-color: transparent;
+    -fx-background: #f7fafc;
+}
+
+.settings-content {
+    -fx-padding: 25;
+}
+
+.card {
+    -fx-background-color: #f0f3fa;
+    -fx-padding: 20 25;
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(gaussian, #8899cc30, 10, 0, 0, 4);
+}
+
+.avatar-circle {
+    -fx-fill: linear-gradient(to bottom right, #667eea, #764ba2);
+}
+
+.avatar-label {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.profile-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a1a2e;
+}
+
+.profile-info {
+    -fx-font-size: 13px;
+    -fx-text-fill: #888;
+}
+
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a1a2e;
+    -fx-padding: 0 0 10 0;
+}
+
+.pref-row {
+    -fx-padding: 12 0;
+    -fx-border-color: #f0f0f0;
+    -fx-border-width: 1 0 0 0;
+}
+
+.pref-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #333;
+}
+
+/* ===== DASHBOARD — BOUTONS MENU ===== */
+.menu-btn {
+    -fx-background-color: #FFB84D;
+    -fx-text-fill: #333;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 15 20;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.menu-btn:hover {
+    -fx-background-color: #FFA726;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+.menu-btn.active-menu {
+    -fx-background-color: #FF9800;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 3);
+}
+
+/* ===== DASHBOARD — CONTENU PRINCIPAL ===== */
+.main-content {
+    -fx-background-color: #f7fafc;
+}
+
+.month-title {
+    -fx-text-fill: #2d3748;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.month-nav-btn {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 10;
+}
+
+.month-nav-btn:hover {
+    -fx-background-color: rgba(0,0,0,0.08);
+    -fx-background-radius: 50%;
+}
+
+/* ===== DASHBOARD — BUDGET ===== */
+.budget-total {
+    -fx-text-fill: #2d3748;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+.budget-remaining {
+    -fx-text-fill: #718096;
+    -fx-font-size: 16px;
+}
+
+/* ===== DASHBOARD — CARTES CATÉGORIES ===== */
+.category-card {
+    -fx-background-color: #f0f3fa;
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 2);
+}
+
+.category-title {
+    -fx-text-fill: #2196F3;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.subcategory-name {
+    -fx-text-fill: #4a5568;
+    -fx-font-size: 14px;
+}
+
+.subcategory-amount {
+    -fx-text-fill: #2d3748;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.add-btn {
+    -fx-background-color: #2d3748;
+    -fx-background-radius: 50%;
+    -fx-cursor: hand;
+    -fx-min-width: 30;
+    -fx-min-height: 30;
+    -fx-max-width: 30;
+    -fx-max-height: 30;
+}
+
+.add-btn:hover {
+    -fx-background-color: #4a5568;
+}
+
+.categories-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.categories-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.categories-scroll .scroll-bar {
+    -fx-background-color: transparent;
+}
+
+/* ===== DASHBOARD — PROFIL SIDEBAR ===== */
+.user-profile {
+    -fx-background-color: rgba(255,255,255,0.2);
+    -fx-background-radius: 15;
+    -fx-padding: 15;
+}
+
+.username {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.logout-link {
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
 }

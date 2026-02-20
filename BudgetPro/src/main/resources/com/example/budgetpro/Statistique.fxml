@@ -10,92 +10,55 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.budgetpro.pages.Statistique"
             prefHeight="700.0" prefWidth="1000.0"
-            style="-fx-background-color: #f5f5f5;">
+            styleClass="page-root">
 
     <!-- EN-TÊTE -->
     <top>
-        <VBox style="-fx-background-color: white; -fx-padding: 20;">
-            <Label text="Statistiques et Graphiques"
-                   style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;">
-                <font>
-                    <Font name="System Bold" size="24.0" />
-                </font>
-            </Label>
-        </VBox>
+        <HBox alignment="CENTER_LEFT" styleClass="page-header">
+            <Label text="Statistiques et Graphiques" styleClass="page-header-title"/>
+        </HBox>
     </top>
 
     <!-- GRAPHIQUES -->
     <center>
-        <ScrollPane fitToWidth="true" fitToHeight="false"
-                    style="-fx-background-color: transparent; -fx-background: #f5f5f5;">
-            <VBox spacing="20" style="-fx-padding: 20;">
+        <ScrollPane fitToWidth="true" fitToHeight="false" styleClass="charts-scroll">
+            <VBox spacing="20" styleClass="charts-content">
 
                 <!-- LIGNE 1 : Pie Chart + Bar Chart -->
                 <HBox spacing="20">
 
-                    <!-- Pie Chart dans un ScrollPane pour gérer le débordement de légende -->
                     <ScrollPane fitToWidth="true"
                                 hbarPolicy="NEVER"
                                 vbarPolicy="AS_NEEDED"
                                 HBox.hgrow="ALWAYS"
-                                style="-fx-background-color: white; -fx-background: white; -fx-background-radius: 10;">
-                        <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;">
+                                styleClass="chart-card-scroll">
+                        <VBox spacing="10" styleClass="chart-card">
                             <Label text="Répartition des Dépenses par Catégorie"
-                                   style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;">
-                                <font>
-                                    <Font name="System Bold" size="14.0" />
-                                </font>
-                            </Label>
+                                   styleClass="label-bold"/>
                             <PieChart fx:id="pieChart"
                                       prefHeight="300"
                                       legendVisible="true"
                                       legendSide="BOTTOM"
-                                      labelsVisible="true" />
+                                      labelsVisible="true"/>
                         </VBox>
                     </ScrollPane>
 
-                    <!-- Bar Chart -->
-                    <VBox spacing="10"
-                          style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;"
-                          HBox.hgrow="ALWAYS">
-                        <Label text="Dépenses Hebdomadaires"
-                               style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
-                        </Label>
-                        <BarChart fx:id="barChart"
-                                  prefHeight="300"
-                                  legendVisible="false">
-                            <xAxis>
-                                <CategoryAxis label="Jours" />
-                            </xAxis>
-                            <yAxis>
-                                <NumberAxis label="Montant (XOF)" />
-                            </yAxis>
+                    <VBox spacing="10" styleClass="chart-card" HBox.hgrow="ALWAYS">
+                        <Label text="Dépenses Hebdomadaires" styleClass="label-bold"/>
+                        <BarChart fx:id="barChart" prefHeight="300" legendVisible="false">
+                            <xAxis><CategoryAxis label="Jours"/></xAxis>
+                            <yAxis><NumberAxis label="Montant (XOF)"/></yAxis>
                         </BarChart>
                     </VBox>
 
                 </HBox>
 
                 <!-- LIGNE 2 : Line Chart -->
-                <VBox spacing="10"
-                      style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;">
-                    <Label text="Tendance Mensuelle des Revenus et Dépenses"
-                           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;">
-                        <font>
-                            <Font name="System Bold" size="14.0" />
-                        </font>
-                    </Label>
-                    <LineChart fx:id="lineChart"
-                               prefHeight="250"
-                               legendVisible="true">
-                        <xAxis>
-                            <CategoryAxis label="Mois" />
-                        </xAxis>
-                        <yAxis>
-                            <NumberAxis label="Montant (XOF)" />
-                        </yAxis>
+                <VBox spacing="10" styleClass="chart-card">
+                    <Label text="Tendance Mensuelle des Revenus et Dépenses" styleClass="label-bold"/>
+                    <LineChart fx:id="lineChart" prefHeight="250" legendVisible="true">
+                        <xAxis><CategoryAxis label="Mois"/></xAxis>
+                        <yAxis><NumberAxis label="Montant (XOF)"/></yAxis>
                     </LineChart>
                 </VBox>
 

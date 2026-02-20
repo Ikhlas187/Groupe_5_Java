@@ -8,84 +8,62 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             prefHeight="900" prefWidth="1400"
-            style="-fx-background-color: #F5F5F5;"
+            styleClass="page-root"
             fx:controller="com.example.budgetpro.pages.DashboardController">
 
-   <!-- ========================================
-        SIDEBAR (Menu gauche - COMPLET)
-        ======================================== -->
+   <!-- SIDEBAR -->
    <left>
-      <VBox spacing="15" prefWidth="300"
-            style="-fx-background-color: linear-gradient(to bottom, #7B8CDE, #A8B5F0);">
+      <VBox spacing="15" prefWidth="300" styleClass="sidebar">
          <padding>
             <Insets top="30" right="20" bottom="30" left="20"/>
          </padding>
 
-         <!-- Logo/Titre -->
-         <Label text="BudgetPro"
-                style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;">
+         <Label text="BudgetPro" styleClass="sidebar-title">
             <VBox.margin>
                <Insets bottom="20"/>
             </VBox.margin>
          </Label>
 
-         <!-- Bouton Dashboard -->
          <Button fx:id="btnDashboard" text="🏠  Dashboard" prefWidth="260" prefHeight="50"
                  onAction="#showDashboardContent"
-                 style="-fx-background-color: #FF9800; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20; -fx-cursor: hand;"/>
+                 styleClass="sidebar-btn-active"/>
 
-         <!-- Bouton Historique -->
          <Button fx:id="btnHistory" text="🕐  Historique des transactions" prefWidth="260" prefHeight="50"
                  onMouseClicked="#showHistoryContent"
-                 style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20; -fx-cursor: hand;"/>
+                 styleClass="sidebar-btn"/>
 
-         <!-- Bouton Statistiques -->
          <Button fx:id="btnStatistics" text="📈  Statistiques et graphiques" prefWidth="260" prefHeight="50"
                  onAction="#showStatisticsContent"
-                 style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20; -fx-cursor: hand;"/>
+                 styleClass="sidebar-btn"/>
 
-         <!-- Bouton Paramètres -->
          <Button fx:id="btnSettings" text="⚙️  Paramètres" prefWidth="260" prefHeight="50"
                  onAction="#showSettingsContent"
-                 style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20; -fx-cursor: hand;"/>
+                 styleClass="sidebar-btn"/>
 
-         <!-- Spacer -->
          <Region VBox.vgrow="ALWAYS"/>
 
-         <!-- Bouton Ajouter transaction -->
          <Button text="➕  Ajouter une catégorie" prefWidth="260" prefHeight="50"
                  onAction="#creerCategorieDialog"
-                 style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20; -fx-cursor: hand;"/>
+                 styleClass="sidebar-btn"/>
 
-         <!-- Bouton Ajouter catégorie -->
          <Button text="➕  Ajouter un revenu" prefWidth="260" prefHeight="50"
                  onAction="#ajouterRevenuDialog"
-                 style="-fx-background-color: #FFB84D; -fx-text-fill: #333; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-alignment: CENTER_LEFT; -fx-padding: 15 20; -fx-cursor: hand;"/>
+                 styleClass="sidebar-btn"/>
 
-         <!-- Spacer -->
          <Region VBox.vgrow="ALWAYS"/>
 
-         <!-- Profil utilisateur -->
-         <HBox alignment="CENTER_LEFT" spacing="15"
-               style="-fx-background-color: rgba(255, 255, 255, 0.2); -fx-background-radius: 15; -fx-padding: 15;">
-            <Circle radius="30" fill="#FFB84D"/>
+         <HBox alignment="CENTER_LEFT" spacing="15" styleClass="sidebar-profile">
+            <Circle radius="30" styleClass="sidebar-avatar"/>
             <VBox>
-               <Label fx:id="usernameLabel"
-                      style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
-               <Hyperlink text="Déconnexion"
-                          style="-fx-text-fill: white; -fx-font-size: 12px;"/>
+               <Label fx:id="usernameLabel" styleClass="sidebar-username"/>
+               <Hyperlink text="Déconnexion" styleClass="sidebar-logout"/>
             </VBox>
          </HBox>
       </VBox>
    </left>
 
-   <!-- ========================================
-        ZONE DE CONTENU DYNAMIQUE (Droite)
-        ======================================== -->
+   <!-- CONTENU DYNAMIQUE -->
    <center>
-      <StackPane fx:id="contentArea" style="-fx-background-color: #F5F5F5;">
-         <!-- Zone vide pour le contenu dynamique -->
-      </StackPane>
+      <StackPane fx:id="contentArea" styleClass="content-area"/>
    </center>
 </BorderPane>
-
