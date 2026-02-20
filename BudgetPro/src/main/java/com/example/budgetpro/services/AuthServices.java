@@ -48,7 +48,10 @@ public class AuthServices {
                 currentUser.setPrenom(rs.getString("prenom"));
                 currentUser.setEmail(rs.getString("email"));
                 currentUser.setTelephone(rs.getString("telephone"));
-
+                currentUser.setPassword(rs.getString("password"));
+                currentUser.setAge(rs.getInt("age"));
+                currentUser.setSexe(rs.getString("sexe"));
+                
                 System.out.println("✅ Connexion réussie : " + currentUser.getPrenom());
                 return true;
             } else {
