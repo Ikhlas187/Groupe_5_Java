@@ -26,25 +26,7 @@
 
             <!-- Barre d'outils : Boutons Export + Filtres -->
             <HBox spacing="15" alignment="CENTER_LEFT">
-                <!-- Boutons Export -->
-                <Button fx:id="exportJsonButton" 
-                        text="Exporter JSON" 
-                        onAction="#handleExportJSON"
-                        style="-fx-background-color: #FF9500; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5; -fx-cursor: hand;">
-                    <font>
-                        <Font name="System Bold" size="12.0" />
-                    </font>
-                </Button>
-
-                <Button fx:id="exportCsvButton" 
-                        text="Exporter CSV" 
-                        onAction="#handleExportCSV"
-                        style="-fx-background-color: #FF9500; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5; -fx-cursor: hand;">
-                    <font>
-                        <Font name="System Bold" size="12.0" />
-                    </font>
-                </Button>
-
+                
                 <!-- Spacer -->
                 <Region HBox.hgrow="ALWAYS" />
 

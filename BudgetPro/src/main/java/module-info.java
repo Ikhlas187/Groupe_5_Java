@@ -4,6 +4,7 @@ module com.example.budgetpro {
     requires javafx.fxml;
     requires java.sql;
     requires com.google.gson;
+    requires java.prefs;
 
 
     opens com.example.budgetpro to javafx.fxml;

@@ -3,78 +3,82 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to c
 Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
 */
 /* 
-    Created on : 19 févr. 2026, 23:44:50
+    Created on : 20 févr. 2026, 08:55:55
     Author     : asteras
 */
 
-/* ========== THÈME CLAIR ========== */
+/* ========== THÈME SOMBRE ========== */
 
 .root {
-    -fx-background-color: #f7fafc;
+    -fx-background-color: #1a202c;
 }
 
 /* ===== TEXTE ===== */
 .title-large {
     -fx-font-size: 32px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2d3748;
+    -fx-text-fill: #e2e8f0;
 }
 
 .title-medium {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2d3748;
+    -fx-text-fill: #e2e8f0;
 }
 
 .title-small {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2d3748;
+    -fx-text-fill: #e2e8f0;
 }
 
 .subtitle {
     -fx-font-size: 14px;
-    -fx-text-fill: #718096;
+    -fx-text-fill: #a0aec0;
 }
 
 .label-bold {
     -fx-font-size: 13px;
     -fx-font-weight: 600;
-    -fx-text-fill: #4a5568;
+    -fx-text-fill: #cbd5e0;
 }
 
 .text-secondary {
-    -fx-text-fill: #718096;
+    -fx-text-fill: #a0aec0;
+}
+
+.label {
+    -fx-text-fill: #e2e8f0;
 }
 
 /* ===== CONTENEURS ===== */
 .container-white {
-    -fx-background-color: white;
+    -fx-background-color: #2d3748;
     -fx-background-radius: 15;
     -fx-padding: 30;
-    -fx-effect: dropshadow(gaussian, #0000001a, 10, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, #00000080, 10, 0, 0, 2);
 }
 
 .header-bar {
-    -fx-background-color: white;
+    -fx-background-color: #2d3748;
     -fx-padding: 20;
 }
 
 /* ===== CARTES STATISTIQUES ===== */
 .stat-card-purple {
-    -fx-background-color: #f5f3ff;
+    -fx-background-color: #4c1d95;
     -fx-background-radius: 12;
     -fx-padding: 20;
 }
 
 .stat-card-red {
-    -fx-background-color: #fff5f5;
+    -fx-background-color: #7f1d1d;
     -fx-background-radius: 12;
     -fx-padding: 20;
 }
 
 .stat-card-green {
-    -fx-background-color: #f0fff4;
+    -fx-background-color: #14532d;
     -fx-background-radius: 12;
     -fx-padding: 20;
 }
@@ -82,56 +86,66 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .stat-value-purple {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-text-fill: #667eea;
+    -fx-text-fill: #a78bfa;
 }
 
 .stat-value-red {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-text-fill: #e53e3e;
+    -fx-text-fill: #f87171;
 }
 
 .stat-value-green {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-text-fill: #38a169;
+    -fx-text-fill: #4ade80;
 }
 
 /* ===== CHAMPS DE TEXTE ===== */
 .input-field {
-    -fx-background-color: #f7fafc;
+    -fx-background-color: #2d3748;
     -fx-background-radius: 10;
-    -fx-border-color: #e2e8f0;
+    -fx-border-color: #4a5568;
     -fx-border-radius: 10;
     -fx-border-width: 2;
     -fx-padding: 12 15;
     -fx-font-size: 14px;
-    -fx-text-fill: #2d3748;
+    -fx-text-fill: #e2e8f0;
 }
 
 .input-field:focused {
-    -fx-border-color: #667eea;
-    -fx-background-color: white;
+    -fx-border-color: #a78bfa;
+    -fx-background-color: #374151;
+}
+
+.text-field, .password-field, .text-area {
+    -fx-background-color: #2d3748;
+    -fx-text-fill: #e2e8f0;
+    -fx-border-color: #4a5568;
+}
+
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #a78bfa;
 }
 
 /* ===== BOUTONS ===== */
 .btn-primary {
-    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #667eea 0%, #764ba2 100%);
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #a78bfa 0%, #c084fc 100%);
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
     -fx-padding: 14 24;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, #667eea66, 10, 0, 0, 5);
+    -fx-effect: dropshadow(gaussian, #a78bfa66, 10, 0, 0, 5);
 }
 
 .btn-primary:hover {
-    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #5568d3 0%, #6941a0 100%);
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #9333ea 0%, #a855f7 100%);
 }
 
 .btn-secondary {
-    -fx-background-color: #4a5568;
+    -fx-background-color: #374151;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
@@ -140,11 +154,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 
 .btn-secondary:hover {
-    -fx-background-color: #2d3748;
+    -fx-background-color: #4b5563;
 }
 
 .btn-warning {
-    -fx-background-color: #FF9500;
+    -fx-background-color: #f59e0b;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
@@ -153,12 +167,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 
 .btn-warning:hover {
-    -fx-background-color: #E68600;
+    -fx-background-color: #d97706;
+}
+
+.button {
+    -fx-text-fill: white;
 }
 
 /* ===== LIENS ===== */
 .link {
-    -fx-text-fill: #667eea;
+    -fx-text-fill: #a78bfa;
     -fx-cursor: hand;
 }
 
@@ -167,64 +185,82 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 
 .link-danger {
-    -fx-text-fill: #e53e3e;
+    -fx-text-fill: #f87171;
     -fx-cursor: hand;
     -fx-underline: true;
 }
 
 /* ===== TABLEVIEW ===== */
 .table-view {
-    -fx-background-color: white;
+    -fx-background-color: #2d3748;
 }
 
 .table-view .column-header {
-    -fx-background-color: #f7fafc;
-    -fx-text-fill: #2d3748;
+    -fx-background-color: #1a202c;
+    -fx-text-fill: #e2e8f0;
     -fx-font-weight: bold;
 }
 
 .table-row-cell {
-    -fx-background-color: white;
-    -fx-text-fill: #2d3748;
+    -fx-background-color: #2d3748;
+    -fx-text-fill: #e2e8f0;
 }
 
 .table-row-cell:odd {
-    -fx-background-color: #f7fafc;
+    -fx-background-color: #374151;
 }
 
 .table-row-cell:selected {
-    -fx-background-color: #e6e6fa;
+    -fx-background-color: #4c1d95;
 }
 
 /* ===== GRAPHIQUES ===== */
 .chart {
-    -fx-background-color: white;
+    -fx-background-color: #2d3748;
 }
 
 .chart-title {
-    -fx-text-fill: #2d3748;
+    -fx-text-fill: #e2e8f0;
 }
 
 .axis-label {
-    -fx-text-fill: #718096;
+    -fx-text-fill: #a0aec0;
 }
 
 .chart-plot-background {
-    -fx-background-color: white;
+    -fx-background-color: #1a202c;
+}
+
+.chart-content {
+    -fx-background-color: #2d3748;
 }
 
 /* ===== COMBOBOX ===== */
 .combo-box {
-    -fx-background-color: #f7fafc;
-    -fx-border-color: #e2e8f0;
+    -fx-background-color: #2d3748;
+    -fx-border-color: #4a5568;
     -fx-border-radius: 10;
 }
 
 .combo-box:focused {
-    -fx-border-color: #667eea;
+    -fx-border-color: #a78bfa;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #2d3748;
+    -fx-text-fill: #e2e8f0;
 }
 
 /* ===== SEPARATOR ===== */
 .separator .line {
-    -fx-background-color: #e2e8f0;
+    -fx-background-color: #4a5568;
+}
+
+/* ===== SCROLLBAR ===== */
+.scroll-bar {
+    -fx-background-color: #2d3748;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #4a5568;
 }
