@@ -49,6 +49,9 @@
          <Button text="➕  Ajouter un revenu" prefWidth="260" prefHeight="50"
                  onAction="#ajouterRevenuDialog"
                  styleClass="sidebar-btn"/>
+         <Button text="➕ Tutoriel" prefWidth="260" prefHeight="50"
+                 onAction="#regaderTutoriel"
+                 styleClass="sidebar-btn"/>
 
          <Region VBox.vgrow="ALWAYS"/>
 
