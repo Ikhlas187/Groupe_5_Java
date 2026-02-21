@@ -50,7 +50,7 @@
                  onAction="#ajouterRevenuDialog"
                  styleClass="sidebar-btn"/>
          <Button text="➕ Tutoriel" prefWidth="260" prefHeight="50"
-                 onAction="#regaderTutoriel"
+                 onAction="#regarderTutoriel"
                  styleClass="sidebar-btn"/>
 
          <Region VBox.vgrow="ALWAYS"/>

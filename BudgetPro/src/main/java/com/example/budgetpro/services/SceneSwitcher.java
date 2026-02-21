@@ -18,8 +18,13 @@ public class SceneSwitcher {
             Stage stage = (Stage) node.getScene().getWindow();
             Scene newScene = new Scene(root);
             
-            //  INITIALISER LE THÈME POUR LA NOUVELLE SCENE 
-            ThemeManager.initTheme(newScene);
+            boolean isPagePublique = fxml.contains("Login")
+                    || fxml.contains("Register")
+                    || fxml.contains("ForgotPassword");
+            
+            if (!isPagePublique){
+                ThemeManager.initTheme(newScene);
+            }
             
             stage.setScene(newScene);
             stage.show();
