@@ -110,9 +110,6 @@
     -fx-max-height: 26px;
 }
 
-/* ========================================
-   SCROLLPANE CATÉGORIES
-   ======================================== */
 .categories-scroll {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
