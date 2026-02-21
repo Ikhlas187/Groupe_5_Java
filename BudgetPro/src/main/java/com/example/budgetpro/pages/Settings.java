@@ -118,7 +118,7 @@ public class Settings {
 
             soldeLabel.setText(String.format("%.0f XOF", soldeReel));
             depensesLabel.setText(String.format("%.0f XOF", depenses));
-            revenusLabel.setText(String.format("%.0f XOF", solde + revenus));
+            revenusLabel.setText(String.format("%.0f XOF", revenus));
 
         } catch (SQLException e) {
             System.err.println("Erreur chargement statistiques : " + e.getMessage());
@@ -127,10 +127,6 @@ public class Settings {
             revenusLabel.setText("- XOF");
         }
     }
-
-    // =============================================
-    // MODIFIER LE PROFIL
-    // =============================================
 
     @FXML
     private void handleModifierProfil() {
@@ -193,9 +189,7 @@ public class Settings {
         }
     }
 
-    // =============================================
-    // CHANGER LE MOT DE PASSE
-    // =============================================
+
 
     @FXML
     private void handleChangerMotDePasse() {
@@ -264,9 +258,6 @@ public class Settings {
         return dialog;
     }
 
-    // =============================================
-    // THÈME
-    // =============================================
 
     @FXML
     private void handleDarkModeToggle() {
