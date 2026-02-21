@@ -118,7 +118,7 @@ public class Settings {
 
             soldeLabel.setText(String.format("%.0f XOF", soldeReel));
             depensesLabel.setText(String.format("%.0f XOF", depenses));
-            revenusLabel.setText(String.format("%.0f XOF", solde + revenus));
+            revenusLabel.setText(String.format("%.0f XOF", revenus));
 
         } catch (SQLException e) {
             System.err.println("Erreur chargement statistiques : " + e.getMessage());

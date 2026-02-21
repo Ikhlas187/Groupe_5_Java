@@ -836,4 +836,13 @@ public class DashboardController {
             activeButton.getStyleClass().add("sidebar-btn-active");
         }
     }
+
+    @FXML
+    private void regarderTutoriel() {
+        try {
+            SceneSwitcher.switchContent("/com/example/budgetpro/Tutoriel.fxml", contentArea);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
