@@ -1,93 +1,65 @@
 /* ========================================
-   SIDEBAR (Menu gauche)
+   dashboard.css — TAILLES UNIQUEMENT
+   Les couleurs restent dans light.css / dark.css
+   ======================================== */
+
+/* ========================================
+   SIDEBAR
    ======================================== */
 .sidebar {
-    -fx-background-color: linear-gradient(to bottom, #7B8CDE, #A8B5F0);
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 2, 2);
+    /* couleurs dans les thèmes */
 }
 
 .sidebar-title {
-    -fx-text-fill: white;
-    -fx-font-size: 24px;
+    -fx-font-size: 22px;          /* ← réduit de 24px */
     -fx-font-weight: bold;
-    -fx-padding: 0 0 20 0;
+    -fx-padding: 0 0 15 0;        /* ← réduit de 20 */
 }
 
-/* Boutons du menu */
-.menu-btn {
-    -fx-background-color: #FFB84D;
-    -fx-text-fill: #333;
-    -fx-font-size: 14px;
+/* Boutons menu sidebar */
+.sidebar-btn,
+.sidebar-btn-active {
+    -fx-font-size: 13px;          /* ← réduit de 14px */
     -fx-font-weight: bold;
-    -fx-padding: 15 20;
     -fx-background-radius: 10;
-    -fx-cursor: hand;
     -fx-alignment: CENTER_LEFT;
-    -fx-graphic-text-gap: 15;
-}
-
-.menu-btn:hover {
-    -fx-background-color: #FFA726;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);
-}
-
-.menu-btn.active-menu {
-    -fx-background-color: #FF9800;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 3);
-}
-
-.menu-icon {
-    -fx-fill: #333;
-}
-
-/* Boutons d'action (Ajouter) */
-.action-btn {
-    -fx-background-color: #66BB6A;
-}
-
-.action-btn:hover {
-    -fx-background-color: #4CAF50;
+    -fx-padding: 12 16;           /* ← réduit de 15 20 */
+    -fx-cursor: hand;
+    -fx-pref-width: 240px;        /* ← réduit de 260px */
+    -fx-pref-height: 44px;        /* ← réduit de 50px */
 }
 
 /* Profil utilisateur */
 .user-profile {
-    -fx-background-color: rgba(255, 255, 255, 0.2);
-    -fx-background-radius: 15;
-    -fx-padding: 15;
+    -fx-background-radius: 12;
+    -fx-padding: 12;              /* ← réduit de 15 */
 }
 
 .username {
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
+    -fx-font-size: 14px;          /* ← réduit de 16px */
     -fx-font-weight: bold;
 }
 
 .logout-link {
-    -fx-text-fill: white;
-    -fx-font-size: 12px;
+    -fx-font-size: 11px;          /* ← réduit de 12px */
 }
 
 /* ========================================
-   CONTENU PRINCIPAL
+   NAVIGATION MOIS
    ======================================== */
-.main-content {
-    -fx-background-color: #F5F5F5;
-}
-
 .month-title {
-    -fx-text-fill: #333;
-    -fx-font-size: 24px;
+    -fx-font-size: 20px;          /* ← réduit de 24px — correspond à la maquette */
     -fx-font-weight: bold;
 }
 
 .month-nav-btn {
     -fx-background-color: transparent;
     -fx-cursor: hand;
-    -fx-padding: 10;
+    -fx-font-size: 20px;          /* taille du chevron ‹ › */
+    -fx-padding: 6;               /* ← réduit de 10 */
 }
 
 .month-nav-btn:hover {
-    -fx-background-color: rgba(0, 0, 0, 0.1);
     -fx-background-radius: 50%;
 }
 
@@ -95,66 +67,52 @@
    CERCLE DE BUDGET
    ======================================== */
 .budget-total {
-    -fx-text-fill: #333;
-    -fx-font-size: 28px;
+    -fx-font-size: 20px;          /* ← réduit de 28px — correspond à la maquette */
     -fx-font-weight: bold;
 }
 
 .budget-remaining {
-    -fx-text-fill: #666;
-    -fx-font-size: 16px;
-}
-
-.progress-circle {
-    -fx-stroke-dash-array: 628; /* 2 * PI * 100 */
-    -fx-stroke-dash-offset: 314; /* À calculer selon le pourcentage */
+    -fx-font-size: 13px;          /* ← réduit de 16px */
 }
 
 /* ========================================
-   CARTES DE CATÉGORIES
+   CARTES CATÉGORIES
    ======================================== */
 .category-card {
-    -fx-background-color: white;
-    -fx-background-radius: 15;
-    -fx-padding: 20;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+    -fx-background-radius: 12;    /* ← réduit de 15 */
+    -fx-padding: 12 14;           /* ← réduit de 20 */
+    /* fond et effet viennent du thème CSS */
 }
 
 .category-title {
-    -fx-text-fill: #2196F3;
-    -fx-font-size: 18px;
+    -fx-font-size: 15px;          /* ← réduit de 18px */
     -fx-font-weight: bold;
 }
 
-.subcategory-item {
-    -fx-padding: 10 0;
-}
-
+/* ========================================
+   SOUS-CATÉGORIES
+   ======================================== */
 .subcategory-name {
-    -fx-text-fill: #333;
-    -fx-font-size: 14px;
+    -fx-font-size: 13px;          /* ← inchangé — déjà correct sur la maquette */
 }
 
 .subcategory-amount {
-    -fx-text-fill: #333;
-    -fx-font-size: 14px;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
 }
 
 .add-btn {
-    -fx-background-color: #333;
     -fx-background-radius: 50%;
     -fx-cursor: hand;
-    -fx-min-width: 30;
-    -fx-min-height: 30;
-    -fx-max-width: 30;
-    -fx-max-height: 30;
+    -fx-min-width: 26px;          /* ← réduit de 30 */
+    -fx-min-height: 26px;
+    -fx-max-width: 26px;
+    -fx-max-height: 26px;
 }
 
-.add-btn:hover {
-    -fx-background-color: #555;
-}
-
+/* ========================================
+   SCROLLPANE CATÉGORIES
+   ======================================== */
 .categories-scroll {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -166,4 +124,13 @@
 
 .categories-scroll .scroll-bar {
     -fx-background-color: transparent;
+}
+
+/* Scrollbar fine */
+.scroll-bar:vertical {
+    -fx-pref-width: 6px;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-radius: 3;
 }
